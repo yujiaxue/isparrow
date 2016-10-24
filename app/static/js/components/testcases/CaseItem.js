@@ -65,11 +65,12 @@ CaseItem = React.createClass({
         var element = ReactDom.findDOMNode(this.refs.element).value.trim();
         var action = ReactDom.findDOMNode(this.refs.action).value.trim();
         var input = ReactDom.findDOMNode(this.refs.input).value.trim();
+        var attr = ReactDom.findDOMNode(this.refs.attr).value.trim();
 
         $.ajax({
             type: 'post',
             url: '/addonestep',
-            data: {cid: cid, sid: sid, page: page, element: element, action: action, input: input},
+            data: {cid: cid, sid: sid, page: page, element: element, action: action, input: input,attr:attr},
             dataType: 'json'
         }).done(function (resp) {
             if (resp.status == 'success') {
@@ -80,6 +81,7 @@ CaseItem = React.createClass({
         ReactDom.findDOMNode(this.refs.element).value = '';
         ReactDom.findDOMNode(this.refs.action).value = '';
         ReactDom.findDOMNode(this.refs.input).value = '';
+        ReactDom.findDOMNode(this.refs.attr).value='';
         return;
     },
 
@@ -90,19 +92,26 @@ CaseItem = React.createClass({
                 <form onSubmit={this.handlerStep}>
                     <span className="col-lg-1"><label className="label label-info">{this.state.orderid}</label>
                     <input ref="sortn" type="hidden" value={this.state.orderid}/> </span>
-                    <span className="col-lg-2 content" style={{paddingRight: '0px',paddingLeft: '0px'}}>
+                    <span className="col-lg-2 content" style={{paddingRight: '0px', paddingLeft: '0px'}}>
                         <input ref="page" className="form-control" type="text" id="page"
                                name="page" placeholder="页面"/>
                     </span>
-                    <span className="col-lg-2 content" style={{paddingRight: '0px',paddingLeft: '0px'}}> <input ref="element" className="form-control" type="text"
-                                                               name="selenium"
-                                                               id="selenium" placeholder="元素"/></span>
-                    <span className="col-lg-2 content" style={{paddingRight: '0px',paddingLeft: '0px'}}> <input ref="action" className="form-control" type="text"
-                                                               name="action"
-                                                               id="action" placeholder="动作"/></span>
-                    <span className="col-lg-4 content" style={{paddingRight: '0px',paddingLeft: '0px'}}> <input ref="input" className="form-control" type="text"
-                                                               name="input"
-                                                               placeholder="输入值"/></span>
+                    <span className="col-lg-2 content" style={{paddingRight: '0px', paddingLeft: '0px'}}> <input
+                        ref="element" className="form-control" type="text"
+                        name="selenium"
+                        id="selenium" placeholder="元素"/></span>
+                    <span className="col-lg-2 content" style={{paddingRight: '0px', paddingLeft: '0px'}}> <input
+                        ref="action" className="form-control" type="text"
+                        name="action"
+                        id="action" placeholder="动作"/></span>
+                    <span className="col-lg-2 content" id="sp" style={{paddingRight: '0px', paddingLeft: '0px'}}> <input
+                        ref="input" className="form-control" type="text"
+                        name="input"
+                        placeholder="输入值"/></span>
+                    <span className="col-lg-2 content"  style={{paddingRight: '0px', paddingLeft: '0px',display:'hidden'}}> <input
+                        ref="attr" className="form-control" type="text"
+                        name="attr"
+                        placeholder="断言属性"/></span>
                     <span className="col-lg-1 content"> <button className="btn btn-info" type="submit"
                                                                 id="submit">保存</button></span>
                 </form>

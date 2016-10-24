@@ -12,15 +12,19 @@ def createXml(taskid,excuteid):
     allcase = Tasks.query.filter(id==taskid).first()
     cases = list(eval(allcase.tcs)) if len(allcase.tcs) >1 else [allcase.tcs,]
     root.set('count',len(cases))
+    root.set('exeid',excuteid)
 
     for case in cases:
         tc= TestCases.query.filter(id==case).first()
-        tc.page,tc.elementmc
-        xtc = ET.SubElement(root,'tc',{'name':tc.title,'id':tc.id})
+        xtc = ET.SubElement(root,'tc',{'name':tc.title,'id':tc.id}) #case level
         tss = TestSteps.query.filter(TestSteps.caseid==tc.id).order_by(TestSteps.sort.asc()).all()
         for ts in tss:
+            Element.query.filter(Ele) #step level
             xstc = ET.SubElement(xtc,'ts',{'page'})
 
+
+    tree = ET.ElementTree(root)
+    tree.write('output.xml')
 if __name__ == "__main__":
     a = '''<?xml version="1.0"?>
     <data>

@@ -9,7 +9,7 @@ import json
 
 from app.database import db_session, engine
 from app.models import Page, Element, TestCases, TestSteps,Tasks,Execution,Excute,Actions
-
+from utils import createXml
 
 # from app import model1,app,db
 #
@@ -52,7 +52,6 @@ def showCase():
                 mysteps.append(step.tojson())
             s = mysteps
         mylist[case.id] = {'case':c,'step':s}
-    print mylist
     return render_template('testcases.html', a={'pagec': u'测试用例', 'showcase': True,'mylist':mylist})
 
 
@@ -88,7 +87,6 @@ page's method
 
 @app.route('/getpages')
 def getAllPages():
-    print 'ok..........'
     pages = Page.query.order_by(Page.pagename.asc()).all()
     return jsonify(status='success',pages = [p.pagename for p in pages])
 
@@ -104,6 +102,10 @@ def addPage():
     desc = form.get('desc')
     if not name:
         return jsonify(status='fail')
+    p = Page(name,china,desc)
+    db_session.add(p)
+    db_session.commit()
+    return jsonify(status='success')
 
 
 # region
@@ -157,11 +159,22 @@ def addStep():
     element = form.get('element')
     action = form.get('action')
     value = form.get('input')
+    attr = form.get('attr')
 
     if not cid or not page  or not action:
         return jsonify({'status': 'fail'})
 
-    step = TestSteps(sort,cid, page, element, action,value)
+    #if not element:
+    step = TestSteps(sort, cid, page, element, action, value, attr)
+    db_session.add(step)
+    db_session.commit()
+    #return jsonify({'status': 'success'})
+    #else:
+    #    elementid = Element.query.filter(Element.name==element).first()
+    #    elementid=elementid.id
+    #    pageid = Page.query.filter(Page.pagename == page).first()
+    #    pageid = pageid.id
+    step = TestSteps(sort,cid, page, element, action,value,attr)
     db_session.add(step)
     db_session.commit()
     return jsonify({'status': 'success'})
@@ -256,8 +269,7 @@ def execute():
     return jsonify(status='success',eid=excute.id)
 def xmlexport(taskid,excuteid):
     print taskid,excuteid
-
-
+    createXml(taskid,excuteid)
     print 'ok.....'
 
 @app.route('/progress/<eid>')
@@ -325,4 +337,4 @@ def pageMapElement():
 
 if __name__ == '__main__':
     app.debug = True
-    app.run(host='10.7.246.251',port=5000)
+    app.run(host='10.7.246.48',port=5000)

@@ -13,7 +13,6 @@ var CaseList = React.createClass({
         }
     },
     componentWillMount: function () {
-        console.info('will mount ?');
         $.ajax({
             type: 'get',
             url: '/getpages',
@@ -42,7 +41,6 @@ var CaseList = React.createClass({
         }.bind(this));
     },
     render: function () {
-        console.info('mount is ?')
         var tc = this.props.tcs.map(function (item) {
             return <CaseItem key={item.id}  page={item} pages={this.state.pages} actions={this.state.actions} pageelement={this.state.mapelement}/>
         }.bind(this));

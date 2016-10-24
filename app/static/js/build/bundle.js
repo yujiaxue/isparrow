@@ -21993,11 +21993,12 @@
 	        var element = ReactDom.findDOMNode(this.refs.element).value.trim();
 	        var action = ReactDom.findDOMNode(this.refs.action).value.trim();
 	        var input = ReactDom.findDOMNode(this.refs.input).value.trim();
+	        var attr = ReactDom.findDOMNode(this.refs.attr).value.trim();
 
 	        $.ajax({
 	            type: 'post',
 	            url: '/addonestep',
-	            data: {cid: cid, sid: sid, page: page, element: element, action: action, input: input},
+	            data: {cid: cid, sid: sid, page: page, element: element, action: action, input: input,attr:attr},
 	            dataType: 'json'
 	        }).done(function (resp) {
 	            if (resp.status == 'success') {
@@ -22008,6 +22009,7 @@
 	        ReactDom.findDOMNode(this.refs.element).value = '';
 	        ReactDom.findDOMNode(this.refs.action).value = '';
 	        ReactDom.findDOMNode(this.refs.input).value = '';
+	        ReactDom.findDOMNode(this.refs.attr).value='';
 	        return;
 	    },
 
@@ -22018,19 +22020,26 @@
 	                React.createElement("form", {onSubmit: this.handlerStep}, 
 	                    React.createElement("span", {className: "col-lg-1"}, React.createElement("label", {className: "label label-info"}, this.state.orderid), 
 	                    React.createElement("input", {ref: "sortn", type: "hidden", value: this.state.orderid}), " "), 
-	                    React.createElement("span", {className: "col-lg-2 content", style: {paddingRight: '0px',paddingLeft: '0px'}}, 
+	                    React.createElement("span", {className: "col-lg-2 content", style: {paddingRight: '0px', paddingLeft: '0px'}}, 
 	                        React.createElement("input", {ref: "page", className: "form-control", type: "text", id: "page", 
 	                               name: "page", placeholder: "页面"})
 	                    ), 
-	                    React.createElement("span", {className: "col-lg-2 content", style: {paddingRight: '0px',paddingLeft: '0px'}}, " ", React.createElement("input", {ref: "element", className: "form-control", type: "text", 
-	                                                               name: "selenium", 
-	                                                               id: "selenium", placeholder: "元素"})), 
-	                    React.createElement("span", {className: "col-lg-2 content", style: {paddingRight: '0px',paddingLeft: '0px'}}, " ", React.createElement("input", {ref: "action", className: "form-control", type: "text", 
-	                                                               name: "action", 
-	                                                               id: "action", placeholder: "动作"})), 
-	                    React.createElement("span", {className: "col-lg-4 content", style: {paddingRight: '0px',paddingLeft: '0px'}}, " ", React.createElement("input", {ref: "input", className: "form-control", type: "text", 
-	                                                               name: "input", 
-	                                                               placeholder: "输入值"})), 
+	                    React.createElement("span", {className: "col-lg-2 content", style: {paddingRight: '0px', paddingLeft: '0px'}}, " ", React.createElement("input", {
+	                        ref: "element", className: "form-control", type: "text", 
+	                        name: "selenium", 
+	                        id: "selenium", placeholder: "元素"})), 
+	                    React.createElement("span", {className: "col-lg-2 content", style: {paddingRight: '0px', paddingLeft: '0px'}}, " ", React.createElement("input", {
+	                        ref: "action", className: "form-control", type: "text", 
+	                        name: "action", 
+	                        id: "action", placeholder: "动作"})), 
+	                    React.createElement("span", {className: "col-lg-2 content", id: "sp", style: {paddingRight: '0px', paddingLeft: '0px'}}, " ", React.createElement("input", {
+	                        ref: "input", className: "form-control", type: "text", 
+	                        name: "input", 
+	                        placeholder: "输入值"})), 
+	                    React.createElement("span", {className: "col-lg-2 content", style: {paddingRight: '0px', paddingLeft: '0px',display:'hidden'}}, " ", React.createElement("input", {
+	                        ref: "attr", className: "form-control", type: "text", 
+	                        name: "attr", 
+	                        placeholder: "断言属性"})), 
 	                    React.createElement("span", {className: "col-lg-1 content"}, " ", React.createElement("button", {className: "btn btn-info", type: "submit", 
 	                                                                id: "submit"}, "保存"))
 	                )
@@ -22077,14 +22086,14 @@
 	var StepList = React.createClass({displayName: "StepList",
 	    render: function () {
 	        var step = this.props.step;
-	        console.info('ok,steplist..');
 	        return (
 	            React.createElement("div", {className: "subcontent "}, 
 	                React.createElement("span", {className: "col-lg-1"}, React.createElement("label", {className: "label label-info"}, step.sort)), 
 	                React.createElement("span", {className: "content col-lg-2"}, step.page), 
-	                React.createElement("span", {className: "content col-lg-2"}, step.element), 
+	                React.createElement("span", {className: "content col-lg-3"}, step.element), 
 	                React.createElement("span", {className: "content col-lg-2"}, step.action), 
-	                React.createElement("span", {className: "content col-lg-4"}, step.value), 
+	                React.createElement("span", {className: "content col-lg-2"}, step.value), 
+	                React.createElement("span", {className: "content col-lg-1"}, step.attr), 
 	                React.createElement("span", {className: "content col-lg-1"}, React.createElement("button", {type: "button", 
 	                                                       className: "btn btn-info"}, "编辑"))
 	            )

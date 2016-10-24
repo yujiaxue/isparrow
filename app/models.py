@@ -106,16 +106,18 @@ class TestSteps(Base):
     element = Column(String, nullable=False)
     action = Column(String, nullable=False)
     value = Column(String, nullable=True)
+    attr = Column(String,)
     createtime = Column(DateTime, default=datetime.now())
     updatetime = Column(DateTime, default=datetime.now())
 
-    def __init__(self, sort, caseid, page, element, action, value=None, updatetime=datetime.now()):
+    def __init__(self, sort, caseid, page, element, action, value=None, attr=None,updatetime=datetime.now()):
         self.sort = sort
         self.caseid = caseid
         self.page = page
         self.element = element
         self.action = action
         self.value = value
+        self.attr = attr
         self.updatetime = updatetime
         self.createtime = datetime.now()
 
@@ -127,6 +129,7 @@ class TestSteps(Base):
             'page': self.page,
             'element': self.element,
             'action': self.action,
+            'attr':self.attr,
             'value': self.value
         }
 
