@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block content %}
+
+    <div class="container-fluid">
+        <div class="row">
+            {% include 'sidebar.html' %}
+
+
+            <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+                <h2 class="sub-header">{{ a.pagec }}</h2>
+
+                <ul>
+                    <li>有3个任务,正在执行## ,还需9分钟,</li>
+                    <li>回归测试1,9个case</li>
+                    <li>冒烟测试,10个case,按历史统计需要5分钟</li>
+                    <li>Tina个人测试,111个case,按历史统计需要1小时完成</li>
+                    <li></li>
+                </ul>
+
+
+                <table class="table table-hover">
+                    <thead>
+                        <th>任务</th>
+                    <th>用例数</th>
+                    <th>执行时长(估计)</th>
+                    <th>详细</th>
+                    </thead>
+                    {% for t in a.tasks %}
+                        <tr>
+                            <td>{{ t.name }}</td>
+                            <td>{{ t.total }}</td>
+                            <td>
+                                {% if t.exetime ==0 %}
+                                    暂无数据
+                                    {% else %}
+                                    {{ t.exetime }}
+                                {% endif %}
+
+                            </td>
+                            <td><a href={{ "/tasks/%d"%t.id }}>详细</a></td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

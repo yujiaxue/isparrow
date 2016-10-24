@@ -1,0 +1,167 @@
+{% extends "base.html" %} {# <!doctype html>
+{#<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>jQuery UI Accordion - Default functionality</title>#}
+
+{% block content %}
+
+    {#   <script>
+        $(function () {
+            $("#accordion").accordion();
+            $("#accordion").accordion("option", "icons", null);
+        });
+    </script>#}
+
+    {% include "sidebar.html" %}
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+        <h2 class="sub-header">{{ a.pagec }}</h2>
+
+        <div class="btn-group">
+            <a id="addCase" href="/addcasePage">
+                <button class="btn-success">添加用例</button>
+            </a>
+
+            <button class="btn-success" id="newTask" data-toggle="modal" data-target="#mytarget">添加计划</button>
+        </div>
+        <div className="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th></th>
+                    <th>测试用例</th>
+                    <th>断言</th>
+                    <th>执行</th>
+                    <th>失败</th>
+                    <th>变更</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for case in a.mylist %}
+                    <tr class="parent" id="0{{ case }}">
+                        <td class="cc"><input type="checkbox" id="{{ case }}"/></td>
+                        <td>{{ a.mylist[case].case.title }}</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    {% if a.mylist[case].step %}
+                        {% for step in a.mylist[case].step %}
+                            <tr class="child0{{ case }}" style="display: none">
+                                <td>{{ step.sort }}</td>
+                                <td colspan="5">{{ step.page }}.{{ step.element }}.{{ step.action }}.{{ step.value }}</td>
+                            </tr>
+                        {% endfor %}
+                    {% endif %}
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+
+    </div>
+
+    <script type="text/javascript">
+        $(function () {
+            Array.prototype.indexOf = function (val) {
+                for (var i = 0; i < this.length; i++) {
+                    if (this[i] == val) return i;
+                }
+                return -1;
+            };
+            Array.prototype.remove = function (val) {
+                var index = this.indexOf(val);
+                if (index > -1) {
+                    this.splice(index, 1);
+                }
+            };
+            var tasks = new Array();
+            $('tr.parent td:gt(0)').click(function () {
+                var oo = $(this).parent("tr").attr('id');
+                $(this).parent().siblings(".child" + oo).toggle();
+            });
+            $('#newTask').click(function () {
+                if (tasks.length == 0) {
+                    $('#noData').modal();
+                    return false;
+                }
+                return true;
+            });
+            $('.cc input').change(function () {
+                var oo = $(this).attr('id');
+                if ($(this).prop('checked')) {
+                    tasks.push(oo);
+                } else {
+                    tasks.remove(oo);
+                }
+                console.info(tasks);
+            });
+            $('#addtask').click(function () {
+                var name = $("#task").val();
+                $.ajax({
+                    type: 'post',
+                    url: '/addtask',
+                    data: {name: name, tcs: tasks},
+                    dataType: 'json'
+                }).done(function (resp) {
+                    if (resp.status == 'success') {
+                        window.location.href = '/tasks/' + resp.id;
+                    } else {
+                        $('.mytask').append('<div class="alert alert-danger" role="alert" style="margin-top: 5px;"><strong>' + resp.message + '</strong></div>');
+                    }
+                })
+            });
+        });
+    </script>
+    <div class="modal fade" id="mytarget">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span
+                            aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title">计划名称</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="input-group mytask">
+                        <input type="text" class="form-control" id="task">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" id="addtask">Add</button>
+                        </span>
+                    </div>
+
+                </div>
+                {#<div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save</button>
+      </div>#}
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+    <div class="modal fade" id="noData">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span
+                            aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title">计划名称</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-warning alert-dismissible fade in" role="alert">
+                        <strong>计划至少要包含一条用例</strong>
+                    </div>
+                </div>
+                {#<div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save</button>
+      </div>#}
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+        });
+    </script>
+{% endblock %}

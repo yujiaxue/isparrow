@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>base2</title>
+<link href="{{ url_for("static",filename="css/bootstrap.min.css") }}" rel="stylesheet"/>
+    <link href="{{ url_for('static',filename='bootstrap-table/bootstrap-table.min.css') }}" rel="stylesheet"/>
+    <link href="{{ url_for('static',filename='css/custom.css') }}" rel="stylesheet"/>
+    <link href="http://v3.bootcss.com/examples/dashboard/dashboard.css" rel="stylesheet"/>
+
+
+  <script src="{{ url_for('static',filename='bootstrap-table/bootstrap-table.js') }}"></script>
+    <script src="{{ url_for('static',filename='bootstrap-table/bootstrap-table-editable.js') }}"></script>
+
+
+
+
+</head>
+<body>
+
+{% block content  %}
+{% endblock %}
+</body>
+</html>

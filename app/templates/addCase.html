@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+            {% include 'sidebar.html' %}
+
+
+            <h2 class="sub-header col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2"
+                >{{ a.pagec }}
+            </h2>
+            <div id="tcs" class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+                {#<div class="btn-group-justified">
+                    <button class="btn-info" id="add">添加用例</button>
+                </div>#}
+            </div>
+        </div>
+
+    </div>
+
+    <script type="text/javascript">
+
+        $(function () {
+
+
+            {#$('#page').blur(function () {
+                $.ajax({
+                    url: '/',
+                    type: 'get',
+                }).done(function (resp) {
+                    availableElement = resp.elements;
+                }).error(function (e) {
+                    alert($(this).val() + "没有找到元素列表,请先添加元素" + e);
+                })
+            });#}
+
+            $('#aaa').autocomplete({
+                source: ["Fortran",
+                    "Groovy",
+                    "Haskell",
+                    "Java",
+                    "JavaScript",
+                    "Lisp",
+                    "Perl",
+                    "PHP",
+                    "Python",
+                    "Ruby",
+                    "Scala",
+                    "Scheme"]
+            })
+
+        });
+
+    </script>
+{% endblock %}
