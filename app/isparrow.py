@@ -337,4 +337,4 @@ def pageMapElement():
 
 if __name__ == '__main__':
     app.debug = True
-    app.run(host='10.7.246.48',port=5000)
+    app.run(host='10.7.246.192',port=5000)
