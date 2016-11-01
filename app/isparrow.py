@@ -5,10 +5,10 @@ from datetime import datetime
 from app import app
 import threading
 from time import sleep
-import json,requests
+import json, urllib2, urllib
 
 from app.database import db_session, engine
-from app.models import Page, Element, TestCases, TestSteps, Tasks, Execution, Excute, Actions,TaskLog
+from app.models import Page, Element, TestCases, TestSteps, Tasks, Execution, Excute, Actions, TaskLog
 from utils import createXml
 
 
@@ -286,7 +286,7 @@ def editTask(tid):
     tcs = form.get('tcs')
     task = Tasks.query.filter(Tasks.id == tid).first()
     task.tcs = tcs
-    task.total=len(tcs.split(','))
+    task.total = len(tcs.split(','))
     db_session.add(task)
     db_session.commit()
     return redirect(url_for('oneTask', tid=tid))
@@ -323,12 +323,14 @@ def execute():
     t.setDaemon(True)
     t.start()
     print '线程已启动'
+
     return jsonify(status='success', eid=excute.id)
 
 
 def xmlexport(taskid, excuteid):
     print taskid, excuteid
     createXml(taskid, excuteid)
+    handlerRequest(taskid, excuteid)
     print 'ok.....'
 
 
@@ -402,22 +404,27 @@ def pageMapElement():
     return jsonify(status='success', pageelement=mappage)
 
 
-#region
+# region
 '''task log'''
+
+
 @app.route('/getcasexml/<tid>/<eid>')
-def getCaseXml(tid,eid):
-    log = TaskLog.query.filter((TaskLog.taskid==tid).__and__(TaskLog.executeid==eid)).first()
+def getCaseXml(tid, eid):
+    log = TaskLog.query.filter((TaskLog.taskid == tid).__and__(TaskLog.executeid == eid)).first()
     if log:
         return log.xmltext
     else:
         return 'no result'
 
-def handlerRequest():
-    r = requests.get('https://github.com/timeline.json')
 
-#endregion
+def handlerRequest(tid, eid):
+    params = urllib.urlencode({'tid': tid, 'eid': eid})
+    f = urllib.urlopen("http://10.7.242.68:8080/hellof?%s" % params)
+    print f.read()
+    
+# endregion
 
 
 if __name__ == '__main__':
     app.debug = True
-    app.run(host='10.7.246.158', port=5000)
+    app.run(host='10.7.246.103', port=5000)

@@ -178,14 +178,18 @@ class Execution(Base):
     caseid = Column(Integer, )
     stepid = Column(Integer, )
     status = Column(String, )
+    log = Column(String,)
+    imageurl = Column(String,)
     createtime = Column(DateTime, )
     updatetime = Column(DateTime, )
 
-    def __init__(self, eid, cid, sid, status='unexcute', updatetime=datetime.now()):
+    def __init__(self, eid, cid, sid, status='unexcute', log='',imageurl='',updatetime=datetime.now()):
         self.executeid = eid
         self.caseid = cid
         self.stepid = sid
         self.status = status
+        self.log=log
+        self.imageurl=imageurl
         self.createtime = datetime.now()
         self.updatetime = updatetime
 
