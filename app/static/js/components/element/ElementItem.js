@@ -5,10 +5,20 @@ var React = require('react');
 
 var Eitem = React.createClass({
 
+    deleteHandle:function () {
+        $.ajax({
+            type:'post',
+            url:'/deleteElement',
+            dataType:'json',
+            data:{id:this.props.element.id}
+        }).done(function (resp) {
+            if(resp.status=='success'){
+                this.props.listTable();
+            }
+        }.bind(this))
+    },
     render: function () {
-
         var item = this.props.element;
-        console.info(item);
         return (
             /*  <tr>
              <td colspan="6" align="center">没有数据!!</td>
@@ -19,7 +29,7 @@ var Eitem = React.createClass({
                 <td> {item.chinese }</td>
                 <td>{item.type }</td>
                 <td>{item.createtime }</td>
-                <td><a className="btn btn-info">删除</a></td>
+                <td><a className="btn btn-info" onClick={this.deleteHandle}>删除</a></td>
             </tr>
         )
     }

@@ -6,9 +6,10 @@ var React = require('react');
 var Eitem = require('./ElementItem');
 
 var Table = React.createClass({
+
     render: function () {
         var myelement = this.props.elements.map(function (item) {
-            return <Eitem key={item.id} element={item}/>
+            return <Eitem key={item.id} element={item} listTable={this.props.listTable} />
         }.bind(this));
         return (
             <div className="table-responsive">
@@ -28,7 +29,6 @@ var Table = React.createClass({
                     </tbody>
                 </table>
             </div>
-
         )
     }
 });

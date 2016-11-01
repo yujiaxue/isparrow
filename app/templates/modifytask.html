@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block  content %}
+
+
+    {% include "sidebar.html" %}
+
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+        <h2 class="sub-header">{{ a.pagec }} </h2>
+
+
+        <form method="post" action={{ "/editTask/"+a.tid }}>
+            <div class="btn-group">
+                <button class="btn-success" onclick="getCheck()">编辑任务</button>
+                <input type="hidden" name="tcs" id="tcs" value="" />
+            </div>
+         </form>
+            <table class="table table-hover table-condensed table-responsive">
+                <thead>
+                <th></th>
+                <th>用例</th>
+                </thead>
+                <tbody>
+                {% for tc in a.alltc %}
+                    <tr>
+                        <td><input id="cc" type="checkbox" {% if tc.id in a.checktc %}
+                                   checked="true"
+                        {% else %} {% endif %} value={{ tc.id }} /></td>
+                        <td>{{ tc.title }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+
+    </div>
+    <script type="text/javascript">
+        var tc = new Array();
+        function getCheck() {
+            $('input:checkbox:checked').each(function () {
+                tc.push($(this).val());
+            })
+            $('#tcs').val(tc);
+        }
+        $(document).ready(function () {
+            var tc = new Array();
+            $('input:checkbox').click(function () {
+                if ($(this).attr('checked') == true) {
+                    $(this).removeAttr('checked');
+                } else {
+                    $(this).attr('checked', 'true');
+                }
+            });
+        })
+    </script>
+
+{% endblock %}

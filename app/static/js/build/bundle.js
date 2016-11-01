@@ -21878,7 +21878,6 @@
 	        }
 	    },
 	    componentWillMount: function () {
-	        console.info('will mount ?');
 	        $.ajax({
 	            type: 'get',
 	            url: '/getpages',
@@ -21907,7 +21906,6 @@
 	        }.bind(this));
 	    },
 	    render: function () {
-	        console.info('mount is ?')
 	        var tc = this.props.tcs.map(function (item) {
 	            return React.createElement(CaseItem, {key: item.id, page: item, pages: this.state.pages, actions: this.state.actions, pageelement: this.state.mapelement})
 	        }.bind(this));
@@ -22084,6 +22082,19 @@
 	var React = __webpack_require__(166);
 
 	var StepList = React.createClass({displayName: "StepList",
+	    deleteItem: function () {
+	        var id = this.step.id;
+	        $.ajax({
+	            type: 'post',
+	            url: '/deleteItem',
+	            data:{id:id},
+	            dataType:'json'
+	        }).done(function (resp) {
+	            if (resp.status == 'success') {
+	                this.state.update = true;
+	            }
+	        })
+	    },
 	    render: function () {
 	        var step = this.props.step;
 	        return (
@@ -22094,8 +22105,11 @@
 	                React.createElement("span", {className: "content col-lg-2"}, step.action), 
 	                React.createElement("span", {className: "content col-lg-2"}, step.value), 
 	                React.createElement("span", {className: "content col-lg-1"}, step.attr), 
-	                React.createElement("span", {className: "content col-lg-1"}, React.createElement("button", {type: "button", 
-	                                                       className: "btn btn-info"}, "编辑"))
+	                React.createElement("span", {className: "content col-lg-1"}, 
+	                    React.createElement("button", {type: "button", className: "btn btn-info", onClick: this.editItem}, "edit")
+	                    /*<button type="button" className="btn btn-info" onClick={this.deleteItem}>d</button>
+	                    <button type="button" className="btn btn-info" onClick={this.afterItem}>a</button>*/
+	                )
 	            )
 	        )
 	    }
@@ -22156,7 +22170,7 @@
 	        return (
 	            React.createElement("div", {className: "col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main"}, 
 	                React.createElement(EleForm, {addElement: this.addElement}), 
-	                React.createElement(EleTable, {elements: this.state.elements})
+	                React.createElement(EleTable, {elements: this.state.elements, listTable: this.listElements})
 	            )
 	        )
 	    }
@@ -22228,9 +22242,10 @@
 	var Eitem = __webpack_require__(188);
 
 	var Table = React.createClass({displayName: "Table",
+
 	    render: function () {
 	        var myelement = this.props.elements.map(function (item) {
-	            return React.createElement(Eitem, {key: item.id, element: item})
+	            return React.createElement(Eitem, {key: item.id, element: item, listTable: this.props.listTable})
 	        }.bind(this));
 	        return (
 	            React.createElement("div", {className: "table-responsive"}, 
@@ -22250,7 +22265,6 @@
 	                    )
 	                )
 	            )
-
 	        )
 	    }
 	});
@@ -22267,10 +22281,20 @@
 
 	var Eitem = React.createClass({displayName: "Eitem",
 
+	    deleteHandle:function () {
+	        $.ajax({
+	            type:'post',
+	            url:'/deleteElement',
+	            dataType:'json',
+	            data:{id:this.props.element.id}
+	        }).done(function (resp) {
+	            if(resp.status=='success'){
+	                this.props.listTable();
+	            }
+	        }.bind(this))
+	    },
 	    render: function () {
-
 	        var item = this.props.element;
-	        console.info(item);
 	        return (
 	            /*  <tr>
 	             <td colspan="6" align="center">没有数据!!</td>
@@ -22281,7 +22305,7 @@
 	                React.createElement("td", null, " ", item.chinese), 
 	                React.createElement("td", null, item.type), 
 	                React.createElement("td", null, item.createtime), 
-	                React.createElement("td", null, React.createElement("a", {className: "btn btn-info"}, "删除"))
+	                React.createElement("td", null, React.createElement("a", {className: "btn btn-info", onClick: this.deleteHandle}, "删除"))
 	            )
 	        )
 	    }

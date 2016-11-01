@@ -48,7 +48,7 @@ var element = React.createClass({
         return (
             <div className="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
                 <EleForm addElement={this.addElement}/>
-                <EleTable elements={this.state.elements}/>
+                <EleTable elements={this.state.elements} listTable={this.listElements}/>
             </div>
         )
     }

@@ -15,10 +15,10 @@
             </div>
         {% endif %}
         <div class="btn-group">
+            <button class="btn-success" > <a class="btn-success" target="_blank" href={{ "/modifyTask/"+a.tid }}>编辑任务</a></button>
             <a id="addCase" href={{ "/log/"+ a.tid }}>
                 <button class="btn-success">查看日志</button>
             </a>
-
             <button class="btn-success" id="excute" data-execute="">执行自动化</button>
         </div>
         <table class="table table-hover">

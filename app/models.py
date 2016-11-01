@@ -107,10 +107,11 @@ class TestSteps(Base):
     action = Column(String, nullable=False)
     value = Column(String, nullable=True)
     attr = Column(String,)
+    label = Column(Integer,)
     createtime = Column(DateTime, default=datetime.now())
     updatetime = Column(DateTime, default=datetime.now())
 
-    def __init__(self, sort, caseid, page, element, action, value=None, attr=None,updatetime=datetime.now()):
+    def __init__(self, sort, caseid, page, element, action, value=None, attr=None,label=1,updatetime=datetime.now()):
         self.sort = sort
         self.caseid = caseid
         self.page = page
@@ -118,6 +119,7 @@ class TestSteps(Base):
         self.action = action
         self.value = value
         self.attr = attr
+        self.label=label
         self.updatetime = updatetime
         self.createtime = datetime.now()
 
@@ -220,3 +222,18 @@ class Actions(Base):
     createtime = Column(DateTime, )
     updatetime = Column(DateTime, )
 
+class TaskLog(Base):
+    __tablename__ = 'tasklogs'
+    id=Column(Integer,nullable=False,primary_key=True)
+    taskid=Column(Integer,)
+    executeid=Column(Integer,)
+    xmltext = Column(String,)
+    createtime=Column(DateTime,)
+    updatetime =Column(DateTime,)
+
+    def __init__(self,tid,eid,xmltext,updatetime=datetime.now()):
+        self.taskid=tid
+        self.executeid=eid
+        self.xmltext=xmltext
+        self.createtime=datetime.now()
+        self.updatetime=updatetime
