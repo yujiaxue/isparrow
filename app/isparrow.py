@@ -258,6 +258,7 @@ def oneTask(tid):
         tcs = list(eval(t.tcs))
     exet = TestCases.query.filter(TestCases.id.in_(tcs)).all()
 
+
     ''''''
     return render_template('onetask.html',
                            a={'pagec': t.name, 'tid': tid, 'status': t.status, 'case': [c.to_json() for c in exet]})
@@ -292,6 +293,12 @@ def editTask(tid):
     return redirect(url_for('oneTask', tid=tid))
 
 
+@application.route('/tasks/<tid>/<cid>')
+def tasklog(tid,cid):
+    t = Excute.query.filter(Excute.taskid==tid).order_by(Excute.id.desc()).first()
+    execution = Execution.query.filter((Execution.executeid==t.id).__and__(Execution.caseid==cid)).all()
+    caseName = TestCases.query.filter(TestCases.id==cid).first()
+    return render_template('tasklog.html',a={'pagec':caseName.title,'log':[l.logtable() for l in execution]})
 # endregion
 
 
@@ -334,9 +341,10 @@ def xmlexport(taskid, excuteid):
     print 'ok.....'
 
 
-@application.route('/progress/<eid>')
-def progress(eid):
-    pass
+@application.route('/progress/<tid>')
+def progress(tid):
+    exc = Excute.query.filter(max(Excute.taskid)).first();
+    execution = Execution.query.filter(Execution.id==exc.id).first();
 
 
 # endregion
@@ -393,7 +401,7 @@ def getActions():
 
 @application.route('/pagemapelement')
 def pageMapElement():
-    mapplicationage = {}
+    mappage = {}
     page = Page.query.all()
     for p in page:
         mappage[p.pagename] = []
@@ -427,4 +435,4 @@ def handlerRequest(tid, eid):
 
 if __name__ == '__main__':
     application.debug = True
-    application.run(host='10.7.246.234', port=5000)
+    application.run(host='10.7.246.161', port=5000)

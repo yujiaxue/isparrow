@@ -15,7 +15,8 @@
             </div>
         {% endif %}
         <div class="btn-group">
-            <button class="btn-success" > <a class="btn-success" target="_blank" href={{ "/modifyTask/"+a.tid }}>编辑任务</a></button>
+            <button class="btn-success"><a class="btn-success" target="_blank" href={{ "/modifyTask/"+a.tid }}>编辑任务</a>
+            </button>
             <a id="addCase" href={{ "/log/"+ a.tid }}>
                 <button class="btn-success">查看日志</button>
             </a>
@@ -25,54 +26,59 @@
             <thead>
             <th>用例</th>
             <th>状态</th>
-            <th>进度</th>
             <th>详细</th>
             </thead>
             {% for c in a.case %}
                 <tr>
                     <td>{{ c.title }}</td>
-                    <td></td>
+                    <td>undone</td>
+                    <td><a href={{ "/tasks/%s/%d"%(a.tid,c.id) }}>详细</a></td>
                 </tr>
-
-
             {% endfor %}
         </table>
     </div>
 
 
-<script type="text/javascript">
+    <script type="text/javascript">
 
-    $(document).ready(function () {
-        $("#excute").click(function () {
-            var tid = {{ a.tid }};
-            console.info(tid);
-            $.ajax({
-                type: 'post',
-                url: '/execute',
-                data: {tid: tid},
-                dataType: 'json'
-            }).done(function (resp) {
-                if (resp.status == 'success') {
-                    window.location.reload();
-                }else{
-
-                }
-            })
-        });
-        function progress(){
-            var status = {{ a.status }};
-            var tid= {{ a.tid }};
-            if(status == 'running') {
+        $(document).ready(function () {
+            var executeid;
+            $("#excute").click(function () {
+                var tid = {{ a.tid }};
                 $.ajax({
-                    type: 'get',
-                    url: '/progress/'+tid
+                    type: 'post',
+                    url: '/execute',
+                    data: {tid: tid},
+                    dataType: 'json'
                 }).done(function (resp) {
+                    if (resp.status == 'success') {
+                        executeid = resp.eid
+                        console.info(executeid)
+                        window.location.reload();
+                    } else {
 
+                    }
                 })
-            }
-        }
-        setInterval("progress()","10000");
+            });
 
-    });
-</script>
+
+            function progress() {
+                var status = {{ a.status }};
+                var tid = {{ a.tid }};
+                if (status == 'running') {
+                    $.ajax({
+                        type: 'get',
+                        url: '/progress/' + tid
+                    }).done(function (resp) {
+                        if(resp.status=='success'){
+
+                        }
+                    })
+                }
+            }
+
+            setInterval(progress(), "10000");
+
+        });
+    </script>
 {% endblock %}

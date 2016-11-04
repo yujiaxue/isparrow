@@ -1,3 +1,4 @@
+# -* - coding:utf8 -* -
 from app.database import Base
 from sqlalchemy import Column, Integer, String, DateTime
 from datetime import datetime
@@ -92,7 +93,8 @@ class TestCases(Base):
             'title': self.title,
             'author': self.author,
             'createtime': self.createtime,
-            'updatetime': self.updatetime
+            'updatetime': self.updatetime,
+            'progress':'90'
         }
 
 
@@ -192,7 +194,18 @@ class Execution(Base):
         self.imageurl=imageurl
         self.createtime = datetime.now()
         self.updatetime = updatetime
-
+    def logtable(self):
+        t = TestSteps.query.filter((TestSteps.caseid==self.caseid).__and__(TestSteps.id==self.stepid)).first()
+        return {
+            'executeid':self.executeid,
+            'caseid':self.caseid,
+            'stepid':self.stepid,
+            'status':self.status,
+            'log':self.log if self.log else '',
+            'imageurl': self.imageurl if self.imageurl else '',
+            'sort':t.id,
+            'step':'%s.%s.%s.%s.%s'%(t.page,t.element,t.action,t.value if t.value else '',t.attr if t.attr else '')
+        }
 
 class Excute(Base):
     __tablename__ = 'excute'

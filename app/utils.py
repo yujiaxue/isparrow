@@ -1,3 +1,4 @@
+# -* - coding:utf8 -* -
 '''
 @author: zhangfujun
 @time:10/18/16 16:45

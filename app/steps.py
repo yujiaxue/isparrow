@@ -15,3 +15,4 @@ def getSteps(cid):
         steps = TestSteps.query.filter(TestSteps.caseid==cid).order_by(TestSteps.sort.asc()).all()
     print steps
     return
+
