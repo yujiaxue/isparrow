@@ -8,4 +8,6 @@
 # from myapp import view11,model1
 #
 from flask import Flask
+import  sys
+sys.path.append('.')
 myapplication = Flask(__name__)
