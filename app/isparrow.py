@@ -1,11 +1,10 @@
 # -* - coding:utf8 -* -
-from _mysql_exceptions import IntegrityError
 from flask import render_template, jsonify, request, redirect, url_for
 from datetime import datetime
-from app import app as application
+from app import app 
 import threading
 from time import sleep
-import json, urllib2, urllib
+import json, urllib2, urllib,socket
 
 from app.database import db_session, engine
 from app.models import Page, Element, TestCases, TestSteps, Tasks, Execution, Excute, Actions, TaskLog
@@ -30,7 +29,7 @@ from utils import createXml
 #     return 'ok1'
 
 
-@application.teardown_appcontext
+@app.teardown_appcontext
 def shutdown_session(exception=None):
     db_session.remove()
 
@@ -39,7 +38,7 @@ def shutdown_session(exception=None):
 '''testcases'''
 
 
-@application.route('/showcase')
+@app.route('/showcase')
 def showCase():
     mylist = {}
     allcase = TestCases.query.order_by(TestCases.id.desc()).all()
@@ -56,12 +55,12 @@ def showCase():
     return render_template('testcases.html', a={'pagec': u'测试用例', 'showcase': True, 'mylist': mylist})
 
 
-@application.route('/addcasePage')
+@app.route('/addcasePage')
 def addCase():
     return render_template('addCase.html', a={'pagec': u'编辑用例', 'addcase': True})
 
 
-@application.route('/addCase', methods=['POST', ])
+@app.route('/addCase', methods=['POST', ])
 def addOneCase():
     data = request.form
     title = data.get('caseName')
@@ -73,7 +72,7 @@ def addOneCase():
     return jsonify(status='success')
 
 
-@application.route('/getCases')
+@app.route('/getCases')
 def queryCase():
     tc = TestCases.query.order_by(TestCases.createtime.desc()).all()
     return jsonify(status='success', tc=[t.to_json() for t in tc])
@@ -86,19 +85,19 @@ page's method
 '''
 
 
-@application.route('/getpages')
+@app.route('/getpages')
 def getAllPages():
     pages = Page.query.order_by(Page.pagename.asc()).all()
     return jsonify(status='success', pages=[p.pagename for p in pages])
 
 
-@application.route('/queryPage')
+@app.route('/queryPage')
 def queryPage():
     pages = Page.query.order_by(Page.id.desc()).all()
     return jsonify(status='success', pages=[p.to_json() for p in pages])
 
 
-@application.route('/addPage', methods=['post'])
+@app.route('/addPage', methods=['post'])
 def addPage():
     form = request.form
     name = form.get('page')
@@ -116,7 +115,7 @@ def addPage():
 '''elements'''
 
 
-@application.route('/addElement', methods=['post', ])
+@app.route('/addElement', methods=['post', ])
 def addElement():
     form = request.form
     pid = form.get("pid")
@@ -136,7 +135,7 @@ def addElement():
     return jsonify(status='success')
 
 
-@application.route('/deleteElement', methods=['post', ])
+@app.route('/deleteElement', methods=['post', ])
 def deleteElement():
     form = request.form
     eid = form.get('id')
@@ -153,7 +152,7 @@ def deleteElement():
 '''
 
 
-@application.route('/getcasesteps/<cid>')
+@app.route('/getcasesteps/<cid>')
 def getSteps(cid):
     steps = []
     if cid:
@@ -164,7 +163,7 @@ def getSteps(cid):
         return jsonify(status='success', steps=[])
 
 
-@application.route('/addonestep', methods=['post'])
+@app.route('/addonestep', methods=['post'])
 def addStep():
     form = request.form
     sort = form.get('sid')
@@ -194,7 +193,7 @@ def addStep():
     return jsonify({'status': 'success'})
 
 
-@application.route('/getstepnum', methods=['post'])
+@app.route('/getstepnum', methods=['post'])
 def getStepNum():
     form = request.form
     cid = form.get('cid')
@@ -202,7 +201,7 @@ def getStepNum():
     return jsonify(status='success', num=num)
 
 
-@application.route('/deleteItem', methods=['post'])
+@app.route('/deleteItem', methods=['post'])
 def deleteItem():
     form = request.form
     sid = form.get('id')
@@ -217,7 +216,7 @@ def deleteItem():
 '''task'''
 
 
-@application.route('/addtask', methods=['post'])
+@app.route('/addtask', methods=['post'])
 def addTask():
     form = request.form
     name = form.get('name')
@@ -242,13 +241,13 @@ def addTask():
     return jsonify(status='success', id=task.id if task else t.id)
 
 
-@application.route('/tasks')
+@app.route('/tasks')
 def showTasks():
     t = Tasks.query.order_by(Tasks.id.desc()).all()
     return render_template('tasks.html', a={'pagec': u'任务执行', 'showtask': True, 'tasks': [m.tojson() for m in t]})
 
 
-@application.route('/tasks/<tid>')
+@app.route('/tasks/<tid>')
 def oneTask(tid):
     t = Tasks.query.filter(Tasks.id == tid).first()
     tcs = []
@@ -265,7 +264,7 @@ def oneTask(tid):
                            a={'pagec': t.name, 'tid': tid, 'status': t.status, 'case': [c.to_json() for c in exet]})
 
 
-@application.route('/modifyTask/<tid>')
+@app.route('/modifyTask/<tid>')
 def modifyTask(tid):
     t = Tasks.query.filter(Tasks.id == tid).first()
     tcs = []
@@ -282,7 +281,7 @@ def modifyTask(tid):
     return render_template('modifytask.html', a={'tid': tid, 'pagec': u'编辑任务', 'checktc': tcs, 'alltc': alltc})
 
 
-@application.route('/editTask/<tid>', methods=['post', ])
+@app.route('/editTask/<tid>', methods=['post', ])
 def editTask(tid):
     form = request.form
     tcs = form.get('tcs')
@@ -294,7 +293,7 @@ def editTask(tid):
     return redirect(url_for('oneTask', tid=tid))
 
 
-@application.route('/tasks/<tid>/<cid>')
+@app.route('/tasks/<tid>/<cid>')
 def tasklog(tid,cid):
     t = Excute.query.filter(Excute.taskid==tid).order_by(Excute.id.desc()).first()
     execution = Execution.query.filter((Execution.executeid==t.id).__and__(Execution.caseid==cid)).all()
@@ -305,7 +304,7 @@ def tasklog(tid,cid):
 
 
 # region
-@application.route('/execute', methods=['post'])
+@app.route('/execute', methods=['post'])
 def execute():
     tid = request.form.get('tid')
     task = Tasks.query.filter(Tasks.id == tid).first()
@@ -345,7 +344,7 @@ def xmlexport(taskid, excuteid):
     print 'ok.....'
 
 
-@application.route('/progress/<tid>')
+@app.route('/progress/<tid>')
 def progress(tid):
     exc = Excute.query.filter(max(Excute.taskid)).first();
     execution = Execution.query.filter(Execution.id==exc.id).first();
@@ -354,12 +353,12 @@ def progress(tid):
 # endregion
 
 
-@application.route('/')
+@app.route('/')
 def hello_world():
     return render_template("index.html")
 
 
-@application.route('/element/<pid>')
+@app.route('/element/<pid>')
 def element(pid):
     page = Page.query.filter(Page.id == pid).first()
     if (not page):
@@ -371,14 +370,14 @@ def element(pid):
     return render_template('element.html', a={'pagec': page.chinese, 'pid': page.id, 'ele': ele})
 
 
-@application.route('/element/item/<pid>')
+@app.route('/element/item/<pid>')
 def elementItem(pid):
     print 'pid is ', pid
     ele = Element.query.filter(Element.pageid == pid).all()
     return jsonify(status='success', elements=[e.tojson() for e in ele])
 
 
-@application.route('/pageditor')
+@app.route('/pageditor')
 def edit_page():
     '''p= Page.query.all()
     print p'''
@@ -386,24 +385,24 @@ def edit_page():
     return render_template("pageEditor.html", a=content)
 
 
-@application.route('/api/todo')
+@app.route('/api/todo')
 def todo():
     content = {'author': 'fujun.zhang@superjia.com'}
     return json.dumps(content)
 
 
-@application.errorhandler(404)
+@app.errorhandler(404)
 def not_found(error):
     return render_template('404.html')
 
 
-@application.route('/getactions')
+@app.route('/getactions')
 def getActions():
     actions = Actions.query.order_by(Actions.operation.asc()).all()
     return jsonify(status='success', actions=[action.operation for action in actions])
 
 
-@application.route('/pagemapelement')
+@app.route('/pagemapelement')
 def pageMapElement():
     mappage = {}
     page = Page.query.all()
@@ -420,7 +419,7 @@ def pageMapElement():
 '''task log'''
 
 
-@application.route('/getcasexml/<tid>/<eid>')
+@app.route('/getcasexml/<tid>/<eid>')
 def getCaseXml(tid, eid):
     log = TaskLog.query.filter((TaskLog.taskid == tid).__and__(TaskLog.executeid == eid)).first()
     if log:
@@ -439,23 +438,27 @@ def handlerRequest(tid, eid):
 
 #region
 ''' 日志功能'''
-@application.route('/task/log/<tid>')
+@app.route('/task/log/<tid>')
 def logChat(tid):
     task = Tasks.query.filter(Tasks.id==tid).first()
     log = Excute.query.filter(Excute.taskid==tid).order_by(Excute.id.desc()).all()
     return render_template('log.html',a={'pagec':task.name,'logs':[l.to_json() for l in log]})
 
 
-@application.route('/execute/log/<eid>')
+@app.route('/execute/log/<eid>')
 def oneLog(eid):
     log = Execution.query.filter(Execution.executeid==eid).order_by(Execution.id.desc()).all()
 
-@application.route('/alllogs')
+@app.route('/alllogs')
 def allLogs():
     logs  = Excute.query.order_by(Excute.id.desc()).all()
     return render_template('alllog.html',a={'pagec':u'日志','logs':[l.to_json() for l in logs]})
 #endregion
 
 if __name__ == '__main__':
-    application.debug = True
-    application.run(host='10.7.246.247', port=5000)
+    app.debug = True
+    ip =  socket.gethostbyname(socket.gethostname())
+    if ip == '10.7.243.110':
+        app.run()
+    else:
+        app.run(host='10.7.246.247', port=5000)
