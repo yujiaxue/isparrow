@@ -79,8 +79,8 @@
             };
             var tasks = new Array();
             $('tr.parent td:gt(0)').click(function () {
-                var oo = $(this).parent("tr").attr('id');
-                $(this).parent().siblings(".child" + oo).toggle();
+                var toc = $(this).parent("tr").attr('id');
+                $(this).parent().siblings(".child" + toc).toggle();
             });
             $('#newTask').click(function () {
                 if (tasks.length == 0) {

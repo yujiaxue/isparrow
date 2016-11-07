@@ -15,7 +15,7 @@
     <link href="http://v3.bootcss.com/examples/dashboard/dashboard.css" rel="stylesheet"/>
 
     <script src="/static/jquery-3.1.0.min.js"></script>
-    <script src="{{ url_for("static",filename="js/bootstrap.min.js") }}" ></script>
+    <script src="{{ url_for("static",filename="js/bootstrap.min.js") }}"></script>
     {#<script src="{{ url_for('static',filename='jquery-3.1.0.min.js') }}"></script>#}
     <script src="{{ url_for('static',filename='bootstrap-table/bootstrap-table.js') }}"></script>
     <script src="{{ url_for('static',filename='bootstrap-table/bootstrap-table-editable.js') }}"></script>
@@ -41,7 +41,18 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="#">Dashboard</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">路线图 <span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="/tasks">任务</a></li>
+
+                        <li class="divider"></li>
+                        <li><a href="/pageditor">页面对象</a></li>
+                        <li class="divider"></li>
+                        <li><a href="/addcasePage">添加用例</a></li>
+                        <li><a href="/showcase">添加计划</a></li>
+                    </ul>
+                </li>
                 <li><a href="#">Settings</a></li>
                 <li><a href="#">Profile</a></li>
                 <li><a href="#">Help</a></li>

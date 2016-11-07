@@ -229,7 +229,18 @@ class Excute(Base):
         self.excutetime = excutetime
         self.updatetime = updatetime
         self.createtime = datetime.now()
-
+    def to_json(self):
+        return {
+            "id":self.id,
+            "taskid":self.taskid,
+            "casecount":self.casecount,
+            "failcase":self.failcase,
+            "successcase":self.successcase,
+            "skipcase":self.skipcase,
+            "excutetime":self.excutetime,
+            "createtime":self.createtime,
+            "updatetime":self.updatetime
+        }
 
 class Actions(Base):
     __tablename__ = 'operation'

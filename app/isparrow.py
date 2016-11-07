@@ -258,6 +258,7 @@ def oneTask(tid):
         tcs = list(eval(t.tcs))
     exet = TestCases.query.filter(TestCases.id.in_(tcs)).all()
 
+    #执行ID 传入 查询状态
 
     ''''''
     return render_template('onetask.html',
@@ -321,6 +322,9 @@ def execute():
     tcs = list(eval(task.tcs)) if len(task.tcs) > 1 else [task.tcs, ]
     for cid in tcs:
         tc = TestCases.query.filter(TestCases.id == cid).first()
+        tce = Execution(excute.id,tc.id,0,'undone')
+        db_session.add(tce)
+        db_session.commit()
         tss = TestSteps.query.filter(TestSteps.caseid == tc.id).order_by(TestSteps.sort.asc()).all()
         for ts in tss:
             exe = Execution(excute.id, tc.id, ts.id, 'undone')
@@ -433,6 +437,25 @@ def handlerRequest(tid, eid):
 # endregion
 
 
+#region
+''' 日志功能'''
+@application.route('/task/log/<tid>')
+def logChat(tid):
+    task = Tasks.query.filter(Tasks.id==tid).first()
+    log = Excute.query.filter(Excute.taskid==tid).order_by(Excute.id.desc()).all()
+    return render_template('log.html',a={'pagec':task.name,'logs':[l.to_json() for l in log]})
+
+
+@application.route('/execute/log/<eid>')
+def oneLog(eid):
+    log = Execution.query.filter(Execution.executeid==eid).order_by(Execution.id.desc()).all()
+
+@application.route('/alllogs')
+def allLogs():
+    logs  = Excute.query.order_by(Excute.id.desc()).all()
+    return render_template('alllog.html',a={'pagec':u'日志','logs':[l.to_json() for l in logs]})
+#endregion
+
 if __name__ == '__main__':
     application.debug = True
-    application.run(host='10.7.246.161', port=5000)
+    application.run(host='10.7.246.247', port=5000)
