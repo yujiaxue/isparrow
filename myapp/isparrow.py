@@ -298,7 +298,7 @@ def tasklog(tid,cid):
     t = Excute.query.filter(Excute.taskid==tid).order_by(Excute.id.desc()).first()
     execution = Execution.query.filter((Execution.executeid==t.id).__and__(Execution.caseid==cid)).all()
     caseName = TestCases.query.filter(TestCases.id==cid).first()
-    return render_template('tasklog.html',a={'pagec':caseName.title,'log':[l.logtable() for l in execution]})
+    return render_template('tasklog.html',a={'pagec':caseName.title,'log':[l.logtable() for l in execution if l.stepid]})
 # endregion
 
 
@@ -363,7 +363,6 @@ def element(pid):
     page = Page.query.filter(Page.id == pid).first()
     if (not page):
         return render_template('element.html', a={'pagec': u'元素定位器', 'ele': None})
-    print page.chinese
     ele = Element.query.filter(Element.pageid == pid).all()
     if len(ele) == 0 or not ele:
         return render_template('element.html', a={'pagec': page.chinese, 'ele': None})
@@ -448,7 +447,7 @@ def logChat(tid):
 @myapplication.route('/execute/log/<eid>')
 def oneLog(eid):
     log = Execution.query.filter(Execution.executeid==eid).order_by(Execution.id.desc()).all()
-
+    return render_template('tasklog.html',a={'pagec':u'','log':[l.logtable() for l in log if l.stepid]})
 @myapplication.route('/alllogs')
 def allLogs():
     logs  = Excute.query.order_by(Excute.id.desc()).all()

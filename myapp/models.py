@@ -203,7 +203,7 @@ class Execution(Base):
             'status':self.status,
             'log':self.log if self.log else '',
             'imageurl': self.imageurl if self.imageurl else '',
-            'sort':t.id,
+            'sort':t.id if t else 0,
             'step':'%s.%s.%s.%s.%s'%(t.page,t.element,t.action,t.value if t.value else '',t.attr if t.attr else '')
         }
 
