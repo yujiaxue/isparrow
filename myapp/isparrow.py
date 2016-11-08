@@ -8,7 +8,7 @@ import json, urllib2, urllib,socket
 
 from myapp.database import db_session, engine
 from myapp.models import Page, Element, TestCases, TestSteps, Tasks, Execution, Excute, Actions, TaskLog
-from utils import createXml
+from xmlOperation
 
 
 # from myapp import model1,myapp,db
@@ -339,7 +339,7 @@ def execute():
 
 def xmlexport(taskid, excuteid):
     print taskid, excuteid
-    createXml(taskid, excuteid)
+    xmlOperation.createXml(taskid, excuteid)
     handlerRequest(taskid, excuteid)
     print 'ok.....'
 
