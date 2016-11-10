@@ -8,7 +8,8 @@ import json, urllib2, urllib,socket
 
 from myapp.database import db_session, engine
 from myapp.models import Page, Element, TestCases, TestSteps, Tasks, Execution, Excute, Actions, TaskLog
-import xmlOperation
+import  xmlOperation
+
 
 # from myapp import model1,myapp,db
 #
@@ -255,12 +256,12 @@ def oneTask(tid):
     else:
         tcs = list(eval(t.tcs))
     exet = TestCases.query.filter(TestCases.id.in_(tcs)).all()
-
     #执行ID 传入 查询状态
+
 
     ''''''
     return render_template('onetask.html',
-                           a={'pagec': t.name, 'tid': tid, 'status': t.status, 'case': [c.to_json() for c in exet]})
+                           a={'pagec': t.name, 'tid': tid, 'status': t.status, 'case': [c.querystatus(tid) for c in exet]})
 
 
 @myapplication.route('/modifyTask/<tid>')
@@ -459,4 +460,4 @@ if __name__ == '__main__':
     if ip == '10.7.243.110':
         myapplication.run()
     else:
-        myapplication.run(host='10.7.246.247', port=5000)
+        myapplication.run(host='10.7.246.171', port=5000)

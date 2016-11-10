@@ -31,7 +31,7 @@
             {% for c in a.case %}
                 <tr>
                     <td>{{ c.title }}</td>
-                    <td>undone</td>
+                    <td>{{ c.status }}</td>
                     <td><a href={{ "/tasks/%s/%d"%(a.tid,c.id) }}>详细</a></td>
                 </tr>
             {% endfor %}

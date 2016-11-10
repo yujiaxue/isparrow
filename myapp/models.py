@@ -2,7 +2,12 @@
 from myapp.database import Base
 from sqlalchemy import Column, Integer, String, DateTime
 from datetime import datetime
+GMT_FORMAT='%a, %d %b %Y %H:%M:%S GMT'
+MY_FORMAT ='%Y/%m/%d %H:%M:%S'
 
+def date_format(stringdate):
+    #return datetime.strftime(datetime.strptime(stringdate,GMT_FORMAT ), MY_FORMAT)
+    return datetime.strftime(stringdate,MY_FORMAT)
 
 class Page(Base):
     __tablename__ = 'page'
@@ -32,8 +37,8 @@ class Page(Base):
             'chinese': self.chinese,
             'desc': self.desc,
             'author': self.author,
-            'createtime': self.createtime,
-            'updatetime': self.updatetime
+            'createtime': date_format(self.createtime),
+            'updatetime': date_format(self.updatetime)
         }
 
 
@@ -68,8 +73,8 @@ class Element(Base):
             'locator': self.locator,
             'chinese': self.chinese,
             'type': self.type,
-            'createtime': self.createtime,
-            'updatetime': self.updatetime
+            'createtime': date_format(self.createtime),
+            'updatetime': date_format(self.updatetime)
         }
 
 
@@ -92,11 +97,22 @@ class TestCases(Base):
             'id': self.id,
             'title': self.title,
             'author': self.author,
-            'createtime': self.createtime,
-            'updatetime': self.updatetime,
+            'createtime': date_format(self.createtime),
+            'updatetime': date_format(self.updatetime),
             'progress':'90'
         }
-
+    def querystatus(self,taskid):
+        excute = Excute.query.filter(Excute.taskid == taskid).order_by(Excute.id.desc()).first()
+        status= Execution.query.filter((Execution.caseid==self.id).__and__(Execution.stepid==0).__and__(Execution.executeid==excute.id)).first()
+        return {
+            'id': self.id,
+            'title': self.title,
+            'author': self.author,
+            'createtime': date_format(self.createtime),
+            'updatetime': date_format(self.updatetime),
+            'progress': '90',
+            'status':status.status
+        }
 
 class TestSteps(Base):
     __tablename__ = 'teststeps'
@@ -168,8 +184,8 @@ class Tasks(Base):
             'tcs': self.tcs,
             'total': self.total,
             'exetime': self.exetime,
-            'createtime': self.createtime,
-            'updatetime': self.updatetime
+            'createtime': date_format(self.createtime),
+            'updatetime': date_format(self.updatetime)
         }
 
 
@@ -238,8 +254,8 @@ class Excute(Base):
             "successcase":self.successcase,
             "skipcase":self.skipcase,
             "excutetime":self.excutetime,
-            "createtime":self.createtime,
-            "updatetime":self.updatetime
+            "createtime":date_format(self.createtime),
+            "updatetime":date_format(self.updatetime)
         }
 
 class Actions(Base):
