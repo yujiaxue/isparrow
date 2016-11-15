@@ -20,23 +20,23 @@ var addCaseForm = React.createClass({
     render: function () {
         return (
             <div className="panel panel-default">
-            <div className="panel-body">
-                <form className="form-inline" role="form"  onSubmit={this.handlerSubmit}>
-                    <div className="input-group">
-                        <div className="input-group-btn">
-                            <input className="form-control" style={{width: '400px',border: '3px solid #5CB85C'}}
-                                   type="text" ref="caseName"
-                                   id="casename" name="casename"
-                                   placeholder="case Name"/>
-                            <span className="input-group-btn">
-                                <button type="submit" style={{border:'1px solid #5CB85C'}}
+                <div className="panel-body">
+                    <form className="form-inline" role="form" onSubmit={this.handlerSubmit}>
+                        <div className="input-group" style={{width: '100%'}}>
+                            <div className="input-group-btn">
+                                <input className="form-control" style={{width: '80%', border: '3px solid #5CB85C'}}
+                                       type="text" ref="caseName"
+                                       id="casename" name="casename"
+                                       placeholder="case Name"/>
+                                <span className="input-group-btn" style={{width:'20%'}}>
+                                <button type="submit" style={{border: '1px solid #5CB85C', width: '100%'}}
                                         className="btn btn-success">添加一条用例吧</button>
                            </span>
+                            </div>
                         </div>
-                    </div>
-                </form>
-            </div>
-        </div>);
+                    </form>
+                </div>
+            </div>);
     }
 });
 

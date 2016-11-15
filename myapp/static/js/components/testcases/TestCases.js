@@ -35,7 +35,7 @@ var TestCases = React.createClass({
             }
         }.bind(this))
     },
-    componentDidMount:function () {
+    componentDidMount: function () {
         this.listCases();
     },
     render: function () {

@@ -4,11 +4,11 @@ from datetime import datetime
 from myapp import myapplication
 import threading
 from time import sleep
-import json, urllib2, urllib,socket
+import json, urllib2, urllib, socket
 
 from myapp.database import db_session, engine
 from myapp.models import Page, Element, TestCases, TestSteps, Tasks, Execution, Excute, Actions, TaskLog
-import  xmlOperation
+import xmlOperation
 
 
 # from myapp import model1,myapp,db
@@ -256,12 +256,13 @@ def oneTask(tid):
     else:
         tcs = list(eval(t.tcs))
     exet = TestCases.query.filter(TestCases.id.in_(tcs)).all()
-    #执行ID 传入 查询状态
+    # 执行ID 传入 查询状态
 
 
     ''''''
     return render_template('onetask.html',
-                           a={'pagec': t.name, 'tid': tid, 'status': t.status, 'case': [c.querystatus(tid) for c in exet]})
+                           a={'pagec': t.name, 'tid': tid, 'status': t.status,
+                              'case': [c.querystatus(tid) for c in exet]})
 
 
 @myapplication.route('/modifyTask/<tid>')
@@ -294,11 +295,14 @@ def editTask(tid):
 
 
 @myapplication.route('/tasks/<tid>/<cid>')
-def tasklog(tid,cid):
-    t = Excute.query.filter(Excute.taskid==tid).order_by(Excute.id.desc()).first()
-    execution = Execution.query.filter((Execution.executeid==t.id).__and__(Execution.caseid==cid)).all()
-    caseName = TestCases.query.filter(TestCases.id==cid).first()
-    return render_template('tasklog.html',a={'pagec':caseName.title,'log':[l.logtable() for l in execution if l.stepid]})
+def tasklog(tid, cid):
+    t = Excute.query.filter(Excute.taskid == tid).order_by(Excute.id.desc()).first()
+    execution = Execution.query.filter((Execution.executeid == t.id).__and__(Execution.caseid == cid)).all()
+    caseName = TestCases.query.filter(TestCases.id == cid).first()
+    return render_template('tasklog.html',
+                           a={'pagec': caseName.title, 'log': [l.logtable() for l in execution if l.stepid]})
+
+
 # endregion
 
 
@@ -321,7 +325,7 @@ def execute():
     tcs = list(eval(task.tcs)) if len(task.tcs) > 1 else [task.tcs, ]
     for cid in tcs:
         tc = TestCases.query.filter(TestCases.id == cid).first()
-        tce = Execution(excute.id,tc.id,0,'undone')
+        tce = Execution(excute.id, tc.id, 0, 'undone')
         db_session.add(tce)
         db_session.commit()
         tss = TestSteps.query.filter(TestSteps.caseid == tc.id).order_by(TestSteps.sort.asc()).all()
@@ -347,7 +351,7 @@ def xmlexport(taskid, excuteid):
 @myapplication.route('/progress/<tid>')
 def progress(tid):
     exc = Excute.query.filter(max(Excute.taskid)).first();
-    execution = Execution.query.filter(Execution.id==exc.id).first();
+    execution = Execution.query.filter(Execution.id == exc.id).first();
 
 
 # endregion
@@ -371,7 +375,6 @@ def element(pid):
 
 @myapplication.route('/element/item/<pid>')
 def elementItem(pid):
-    print 'pid is ', pid
     ele = Element.query.filter(Element.pageid == pid).all()
     return jsonify(status='success', elements=[e.tojson() for e in ele])
 
@@ -432,32 +435,61 @@ def handlerRequest(tid, eid):
     f = urllib.urlopen("http://10.7.242.68:8080/hellof?%s" % params)
     print f.read()
 
+
 # endregion
 
 
-#region
+# region
 ''' 日志功能'''
+
+
 @myapplication.route('/task/log/<tid>')
 def logChat(tid):
-    task = Tasks.query.filter(Tasks.id==tid).first()
-    log = Excute.query.filter(Excute.taskid==tid).order_by(Excute.id.desc()).all()
-    return render_template('log.html',a={'pagec':task.name,'logs':[l.to_json() for l in log]})
+    task = Tasks.query.filter(Tasks.id == tid).first()
+    log = Excute.query.filter(Excute.taskid == tid).order_by(Excute.id.desc()).all()
+    return render_template('log.html', a={'pagec': task.name, 'logs': [l.to_json() for l in log]})
 
 
 @myapplication.route('/execute/log/<eid>')
 def oneLog(eid):
-    log = Execution.query.filter(Execution.executeid==eid).order_by(Execution.id.desc()).all()
-    return render_template('tasklog.html',a={'pagec':u'','log':[l.logtable() for l in log if l.stepid]})
+    log = Execution.query.filter(Execution.executeid == eid).order_by(Execution.id.desc()).all()
+    return render_template('tasklog.html', a={'pagec': u'', 'log': [l.logtable() for l in log if l.stepid]})
+
+
 @myapplication.route('/alllogs')
 def allLogs():
-    logs  = Excute.query.order_by(Excute.id.desc()).all()
-    return render_template('alllog.html',a={'pagec':u'日志','logs':[l.to_json() for l in logs]})
+    logs = Excute.query.order_by(Excute.id.desc()).all()
+    return render_template('alllog.html', a={'pagec': u'日志', 'logs': [l.to_json() for l in logs]})
+
+
+# endregion
+
+
+# region
+'''function'''
+
+
+@myapplication.route('/customFuction')
+def customFuction():
+    return render_template('customFucntion.html', a={'pagec': u'自定义功能'})
+
+
+# endregion
+
+#region
+'''grid '''
+def queryGrid():
+    baseUrl = "http://10.7.242.68"
+    dd = urllib.urlopen(baseUrl)
+    print dd
+
 #endregion
 
 if __name__ == '__main__':
-    myapplication.debug = True
-    ip =  socket.gethostbyname(socket.gethostname())
+    '''myapplication.debug = True
+    ip = socket.gethostbyname(socket.gethostname())
     if ip == '10.7.243.110':
         myapplication.run()
     else:
-        myapplication.run(host='10.7.246.171', port=5000)
+        myapplication.run(host='10.7.246.175', port=5000)'''
+    queryGrid()

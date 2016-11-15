@@ -25,12 +25,15 @@ var pageForm = React.createClass({
     render: function () {
         var addPage = this.props.addPage;
         return (
-                <form className="form-inline" role="form" onSubmit={this.handleSubmit}>
-                    <input className="form-control" style={{width:'30%'}} ref="page" id="pname" name="pname" placeholder="Page's Name 必填"/>
-                    <input className="form-control" style={{width:'30%'}} ref="china" id="chinese" name="chinese" placeholder="中文名称 必填"/>
-                    <input className="form-control" style={{width:'30%'}} ref="desc" id="desc" name="desc" placeholder="描述"/>
-                    <button className="btn btn-default" type="submit">Add</button>
-                </form>
+            <form className="form-inline" role="form" onSubmit={this.handleSubmit}>
+                <input className="form-control" style={{width: '30%'}} ref="page" id="pname" name="pname"
+                       placeholder="Page's Name 必填"/>
+                <input className="form-control" style={{width: '30%'}} ref="china" id="chinese" name="chinese"
+                       placeholder="中文名称 必填"/>
+                <input className="form-control" style={{width: '30%'}} ref="desc" id="desc" name="desc"
+                       placeholder="描述"/>
+                <button className="btn btn-default" type="submit">Add</button>
+            </form>
         )
 
 

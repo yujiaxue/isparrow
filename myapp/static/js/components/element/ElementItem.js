@@ -5,14 +5,14 @@ var React = require('react');
 
 var Eitem = React.createClass({
 
-    deleteHandle:function () {
+    deleteHandle: function () {
         $.ajax({
-            type:'post',
-            url:'/deleteElement',
-            dataType:'json',
-            data:{id:this.props.element.id}
+            type: 'post',
+            url: '/deleteElement',
+            dataType: 'json',
+            data: {id: this.props.element.id}
         }).done(function (resp) {
-            if(resp.status=='success'){
+            if (resp.status == 'success') {
                 this.props.listTable();
             }
         }.bind(this))

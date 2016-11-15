@@ -1,4 +1,3 @@
-
 {% extends "base.html" %}
 {% block content %}
     {% include 'sidebar.html' %}
@@ -6,25 +5,26 @@
         <h2 class="sub-header">{{ a.pagec }}
 
         </h2>
-    <table class="table-responsive table ">
-        <thead>
+        <table class="table-responsive table ">
+            <thead>
             <th>步骤</th>
             <th>状态</th>
             <th>日志</th>
             <th>图片</th>
             <th>其他</th>
-        </thead>
-        <tbody>
+            </thead>
+            <tbody>
             {% for log in a.log %}
                 <tr>
                     <td>{{ log.step }}</td>
-                    <td> {% if log.status == 'done' %}<label class="label-success" >{{ log.status }}</label> {% else  %}{{ log.status }}{% endif %}</td>
+                    <td> {% if log.status == 'done' %}<label class="label-success">{{ log.status }}</label> {% else %}
+                        {{ log.status }}{% endif %}</td>
                     <td>{{ log.log }}</td>
                     <td>{{ log.imageurl }}</td>
                     <td>..</td>
                 </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+            {% endfor %}
+            </tbody>
+        </table>
     </div>
 {% endblock %}

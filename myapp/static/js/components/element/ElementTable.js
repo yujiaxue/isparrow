@@ -9,7 +9,7 @@ var Table = React.createClass({
 
     render: function () {
         var myelement = this.props.elements.map(function (item) {
-            return <Eitem key={item.id} element={item} listTable={this.props.listTable} />
+            return <Eitem key={item.id} element={item} listTable={this.props.listTable}/>
         }.bind(this));
         return (
             <div className="table-responsive">

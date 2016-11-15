@@ -70,7 +70,7 @@ CaseItem = React.createClass({
         $.ajax({
             type: 'post',
             url: '/addonestep',
-            data: {cid: cid, sid: sid, page: page, element: element, action: action, input: input,attr:attr},
+            data: {cid: cid, sid: sid, page: page, element: element, action: action, input: input, attr: attr},
             dataType: 'json'
         }).done(function (resp) {
             if (resp.status == 'success') {
@@ -81,7 +81,7 @@ CaseItem = React.createClass({
         ReactDom.findDOMNode(this.refs.element).value = '';
         ReactDom.findDOMNode(this.refs.action).value = '';
         ReactDom.findDOMNode(this.refs.input).value = '';
-        ReactDom.findDOMNode(this.refs.attr).value='';
+        ReactDom.findDOMNode(this.refs.attr).value = '';
         return;
     },
 
@@ -108,7 +108,8 @@ CaseItem = React.createClass({
                         ref="input" className="form-control" type="text"
                         name="input"
                         placeholder="输入值"/></span>
-                    <span className="col-lg-2 content"  style={{paddingRight: '0px', paddingLeft: '0px',display:'hidden'}}> <input
+                    <span className="col-lg-2 content"
+                          style={{paddingRight: '0px', paddingLeft: '0px', display: 'hidden'}}> <input
                         ref="attr" className="form-control" type="text"
                         name="attr"
                         placeholder="断言属性"/></span>

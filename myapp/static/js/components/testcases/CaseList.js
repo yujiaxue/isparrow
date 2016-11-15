@@ -8,8 +8,8 @@ var CaseList = React.createClass({
     getInitialState: function () {
         return {
             pages: [],
-            actions:[],
-            mapelement:[],
+            actions: [],
+            mapelement: [],
         }
     },
     componentWillMount: function () {
@@ -32,17 +32,18 @@ var CaseList = React.createClass({
             }
         }.bind(this));
         $.ajax({
-            type:'get',
-            url:'/pagemapelement'
+            type: 'get',
+            url: '/pagemapelement'
         }).done(function (resp) {
-            if(resp.status=='success'){
-                this.state.mapelement=resp.pageelement
+            if (resp.status == 'success') {
+                this.state.mapelement = resp.pageelement
             }
         }.bind(this));
     },
     render: function () {
         var tc = this.props.tcs.map(function (item) {
-            return <CaseItem key={item.id}  page={item} pages={this.state.pages} actions={this.state.actions} pageelement={this.state.mapelement}/>
+            return <CaseItem key={item.id} page={item} pages={this.state.pages} actions={this.state.actions}
+                             pageelement={this.state.mapelement}/>
         }.bind(this));
         return (
             <div className="panel-default panel col-lg-12">

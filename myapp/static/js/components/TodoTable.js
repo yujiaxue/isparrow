@@ -5,9 +5,9 @@ var React = require('react')
 var TodoItem = require('./TodoItem')
 
 var TodoTable = React.createClass({
-    render: function(){
-        var todos = this.props.todos.map(function(item){
-            return <TodoItem key={item.id} todo={item} />
+    render: function () {
+        var todos = this.props.todos.map(function (item) {
+            return <TodoItem key={item.id} todo={item}/>
         }.bind(this));
         return (
             <div>
@@ -24,7 +24,7 @@ var TodoTable = React.createClass({
                     <tbody>
                     {todos}
                     </tbody>
-                    </table>
+                </table>
             </div>
         )
     }

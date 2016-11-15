@@ -56,15 +56,15 @@ export function getStates() {
         {abbr: "WY", name: "Wyoming"}
     ]
 }
-export function matchStateToTerm (state, value) {
-  return (
-    state.name.toLowerCase().indexOf(value.toLowerCase()) !== -1 ||
-    state.abbr.toLowerCase().indexOf(value.toLowerCase()) !== -1
-  )
+export function matchStateToTerm(state, value) {
+    return (
+        state.name.toLowerCase().indexOf(value.toLowerCase()) !== -1 ||
+        state.abbr.toLowerCase().indexOf(value.toLowerCase()) !== -1
+    )
 }
-export function sortStates (a, b, value) {
-  return (
-    a.name.toLowerCase().indexOf(value.toLowerCase()) >
-    b.name.toLowerCase().indexOf(value.toLowerCase()) ? 1 : -1
-  )
+export function sortStates(a, b, value) {
+    return (
+        a.name.toLowerCase().indexOf(value.toLowerCase()) >
+        b.name.toLowerCase().indexOf(value.toLowerCase()) ? 1 : -1
+    )
 }

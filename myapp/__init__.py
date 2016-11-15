@@ -8,7 +8,9 @@
 # from myapp import view11,model1
 #
 import sys
+
 reload(sys)
 sys.setdefaultencoding('utf8')
 from flask import Flask
+
 myapplication = Flask(__name__)

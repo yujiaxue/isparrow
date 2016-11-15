@@ -4,15 +4,16 @@
 '''
 
 from flask.blueprints import Blueprint
-steps = Blueprint('steps',__name__)
+
+steps = Blueprint('steps', __name__)
 
 from models import TestSteps
 
-@steps.route('/getcasesteps/<cid>',method=['get',])
+
+@steps.route('/getcasesteps/<cid>', method=['get', ])
 def getSteps(cid):
     steps = []
     if cid:
-        steps = TestSteps.query.filter(TestSteps.caseid==cid).order_by(TestSteps.sort.asc()).all()
+        steps = TestSteps.query.filter(TestSteps.caseid == cid).order_by(TestSteps.sort.asc()).all()
     print steps
     return
-

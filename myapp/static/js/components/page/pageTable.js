@@ -41,4 +41,4 @@ var pageTable = React.createClass({
 
     }
 });
-module.exports=pageTable;
+module.exports = pageTable;

@@ -14,7 +14,7 @@ var element = React.createClass({
         }
     },
     listElements: function () {
-         var hh = window.location.href.split('/');
+        var hh = window.location.href.split('/');
         var pid = hh[hh.length - 1];
         $.ajax({
             type: 'get',
@@ -22,7 +22,7 @@ var element = React.createClass({
         }).done(function (resp) {
             if (resp.status == 'success') {
                 this.setState({elements: resp.elements});
-            }else{
+            } else {
                 console.info('resp fail list');
             }
         }.bind(this))
@@ -31,7 +31,7 @@ var element = React.createClass({
         $.ajax({
             type: 'post',
             url: '/addElement',
-            dataType:'json',
+            dataType: 'json',
             data: data
         }).done(function (resp) {
             if (resp.status == 'fail') {

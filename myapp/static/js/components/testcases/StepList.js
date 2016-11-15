@@ -9,8 +9,8 @@ var StepList = React.createClass({
         $.ajax({
             type: 'post',
             url: '/deleteItem',
-            data:{id:id},
-            dataType:'json'
+            data: {id: id},
+            dataType: 'json'
         }).done(function (resp) {
             if (resp.status == 'success') {
                 this.state.update = true;
@@ -30,7 +30,7 @@ var StepList = React.createClass({
                 <span className="content col-lg-1">
                     <button type="button" className="btn btn-info" onClick={this.editItem}>edit</button>
                     {/*<button type="button" className="btn btn-info" onClick={this.deleteItem}>d</button>
-                    <button type="button" className="btn btn-info" onClick={this.afterItem}>a</button>*/}
+                     <button type="button" className="btn btn-info" onClick={this.afterItem}>a</button>*/}
                 </span>
             </div>
         )

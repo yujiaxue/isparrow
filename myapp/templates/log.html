@@ -13,12 +13,12 @@
             <th>详细</th>
             </thead>
             <tbody>
-                {% for log in a.logs %}
-                    <tr>
-                        <td>{{ log.id }}</td>
+            {% for log in a.logs %}
+                <tr>
+                    <td>{{ log.id }}</td>
                     <td>{{ log.createtime }}</td>
-                    <td><a href={{ "/execute/log/%d"%log.id }} >执行日志</a></td>
-                    </tr>
+                    <td><a href={{ "/execute/log/%d"%log.id }}>执行日志</a></td>
+                </tr>
             {% endfor %}
             </tbody>
         </table>

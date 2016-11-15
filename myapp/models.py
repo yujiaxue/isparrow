@@ -2,12 +2,15 @@
 from myapp.database import Base
 from sqlalchemy import Column, Integer, String, DateTime
 from datetime import datetime
-GMT_FORMAT='%a, %d %b %Y %H:%M:%S GMT'
-MY_FORMAT ='%Y/%m/%d %H:%M:%S'
+
+GMT_FORMAT = '%a, %d %b %Y %H:%M:%S GMT'
+MY_FORMAT = '%Y/%m/%d %H:%M:%S'
+
 
 def date_format(stringdate):
-    #return datetime.strftime(datetime.strptime(stringdate,GMT_FORMAT ), MY_FORMAT)
-    return datetime.strftime(stringdate,MY_FORMAT)
+    # return datetime.strftime(datetime.strptime(stringdate,GMT_FORMAT ), MY_FORMAT)
+    return datetime.strftime(stringdate, MY_FORMAT)
+
 
 class Page(Base):
     __tablename__ = 'page'
@@ -99,11 +102,13 @@ class TestCases(Base):
             'author': self.author,
             'createtime': date_format(self.createtime),
             'updatetime': date_format(self.updatetime),
-            'progress':'90'
+            'progress': '90'
         }
-    def querystatus(self,taskid):
+
+    def querystatus(self, taskid):
         excute = Excute.query.filter(Excute.taskid == taskid).order_by(Excute.id.desc()).first()
-        status= Execution.query.filter((Execution.caseid==self.id).__and__(Execution.stepid==0).__and__(Execution.executeid==excute.id)).first()
+        status = Execution.query.filter((Execution.caseid == self.id).__and__(Execution.stepid == 0).__and__(
+            Execution.executeid == excute.id)).first()
         return {
             'id': self.id,
             'title': self.title,
@@ -111,8 +116,9 @@ class TestCases(Base):
             'createtime': date_format(self.createtime),
             'updatetime': date_format(self.updatetime),
             'progress': '90',
-            'status':status.status
+            'status': status.status
         }
+
 
 class TestSteps(Base):
     __tablename__ = 'teststeps'
@@ -124,12 +130,12 @@ class TestSteps(Base):
     element = Column(String, nullable=False)
     action = Column(String, nullable=False)
     value = Column(String, nullable=True)
-    attr = Column(String,)
-    label = Column(Integer,)
+    attr = Column(String, )
+    label = Column(Integer, )
     createtime = Column(DateTime, default=datetime.now())
     updatetime = Column(DateTime, default=datetime.now())
 
-    def __init__(self, sort, caseid, page, element, action, value=None, attr=None,label=1,updatetime=datetime.now()):
+    def __init__(self, sort, caseid, page, element, action, value=None, attr=None, label=1, updatetime=datetime.now()):
         self.sort = sort
         self.caseid = caseid
         self.page = page
@@ -137,7 +143,7 @@ class TestSteps(Base):
         self.action = action
         self.value = value
         self.attr = attr
-        self.label=label
+        self.label = label
         self.updatetime = updatetime
         self.createtime = datetime.now()
 
@@ -149,7 +155,7 @@ class TestSteps(Base):
             'page': self.page,
             'element': self.element,
             'action': self.action,
-            'attr':self.attr,
+            'attr': self.attr,
             'value': self.value
         }
 
@@ -196,32 +202,35 @@ class Execution(Base):
     caseid = Column(Integer, )
     stepid = Column(Integer, )
     status = Column(String, )
-    log = Column(String,)
-    imageurl = Column(String,)
+    log = Column(String, )
+    imageurl = Column(String, )
     createtime = Column(DateTime, )
     updatetime = Column(DateTime, )
 
-    def __init__(self, eid, cid, sid, status='unexcute', log='',imageurl='',updatetime=datetime.now()):
+    def __init__(self, eid, cid, sid, status='unexcute', log='', imageurl='', updatetime=datetime.now()):
         self.executeid = eid
         self.caseid = cid
         self.stepid = sid
         self.status = status
-        self.log=log
-        self.imageurl=imageurl
+        self.log = log
+        self.imageurl = imageurl
         self.createtime = datetime.now()
         self.updatetime = updatetime
+
     def logtable(self):
-        t = TestSteps.query.filter((TestSteps.caseid==self.caseid).__and__(TestSteps.id==self.stepid)).first()
+        t = TestSteps.query.filter((TestSteps.caseid == self.caseid).__and__(TestSteps.id == self.stepid)).first()
         return {
-            'executeid':self.executeid,
-            'caseid':self.caseid,
-            'stepid':self.stepid,
-            'status':self.status,
-            'log':self.log if self.log else '',
+            'executeid': self.executeid,
+            'caseid': self.caseid,
+            'stepid': self.stepid,
+            'status': self.status,
+            'log': self.log if self.log else '',
             'imageurl': self.imageurl if self.imageurl else '',
-            'sort':t.id if t else 0,
-            'step':'%s.%s.%s.%s.%s'%(t.page,t.element,t.action,t.value if t.value else '',t.attr if t.attr else '')
+            'sort': t.id if t else 0,
+            'step': '%s.%s.%s.%s.%s' % (
+            t.page, t.element, t.action, t.value if t.value else '', t.attr if t.attr else '')
         }
+
 
 class Excute(Base):
     __tablename__ = 'excute'
@@ -245,18 +254,20 @@ class Excute(Base):
         self.excutetime = excutetime
         self.updatetime = updatetime
         self.createtime = datetime.now()
+
     def to_json(self):
         return {
-            "id":self.id,
-            "taskid":self.taskid,
-            "casecount":self.casecount,
-            "failcase":self.failcase,
-            "successcase":self.successcase,
-            "skipcase":self.skipcase,
-            "excutetime":self.excutetime,
-            "createtime":date_format(self.createtime),
-            "updatetime":date_format(self.updatetime)
+            "id": self.id,
+            "taskid": self.taskid,
+            "casecount": self.casecount,
+            "failcase": self.failcase,
+            "successcase": self.successcase,
+            "skipcase": self.skipcase,
+            "excutetime": self.excutetime,
+            "createtime": date_format(self.createtime),
+            "updatetime": date_format(self.updatetime)
         }
+
 
 class Actions(Base):
     __tablename__ = 'operation'
@@ -266,18 +277,19 @@ class Actions(Base):
     createtime = Column(DateTime, )
     updatetime = Column(DateTime, )
 
+
 class TaskLog(Base):
     __tablename__ = 'tasklogs'
-    id=Column(Integer,nullable=False,primary_key=True)
-    taskid=Column(Integer,)
-    executeid=Column(Integer,)
-    xmltext = Column(String,)
-    createtime=Column(DateTime,)
-    updatetime =Column(DateTime,)
+    id = Column(Integer, nullable=False, primary_key=True)
+    taskid = Column(Integer, )
+    executeid = Column(Integer, )
+    xmltext = Column(String, )
+    createtime = Column(DateTime, )
+    updatetime = Column(DateTime, )
 
-    def __init__(self,tid,eid,xmltext,updatetime=datetime.now()):
-        self.taskid=tid
-        self.executeid=eid
-        self.xmltext=xmltext
-        self.createtime=datetime.now()
-        self.updatetime=updatetime
+    def __init__(self, tid, eid, xmltext, updatetime=datetime.now()):
+        self.taskid = tid
+        self.executeid = eid
+        self.xmltext = xmltext
+        self.createtime = datetime.now()
+        self.updatetime = updatetime
