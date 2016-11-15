@@ -107,7 +107,9 @@ class TestCases(Base):
 
     def querystatus(self, taskid):
         excute = Excute.query.filter(Excute.taskid == taskid).order_by(Excute.id.desc()).first()
-        status = Execution.query.filter((Execution.caseid == self.id).__and__(Execution.stepid == 0).__and__(
+        status = None
+        if excute:
+            status = Execution.query.filter((Execution.caseid == self.id).__and__(Execution.stepid == 0).__and__(
             Execution.executeid == excute.id)).first()
         return {
             'id': self.id,
@@ -116,7 +118,7 @@ class TestCases(Base):
             'createtime': date_format(self.createtime),
             'updatetime': date_format(self.updatetime),
             'progress': '90',
-            'status': status.status
+            'status': status.status if status else 'ready'
         }
 
 

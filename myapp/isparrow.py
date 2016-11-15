@@ -297,10 +297,14 @@ def editTask(tid):
 @myapplication.route('/tasks/<tid>/<cid>')
 def tasklog(tid, cid):
     t = Excute.query.filter(Excute.taskid == tid).order_by(Excute.id.desc()).first()
-    execution = Execution.query.filter((Execution.executeid == t.id).__and__(Execution.caseid == cid)).all()
+    if t:
+        execution = Execution.query.filter((Execution.executeid == t.id).__and__(Execution.caseid == cid)).all()
+        log = [l.logtable() for l in execution if l.stepid]
+    else:
+        log = []
     caseName = TestCases.query.filter(TestCases.id == cid).first()
     return render_template('tasklog.html',
-                           a={'pagec': caseName.title, 'log': [l.logtable() for l in execution if l.stepid]})
+                           a={'pagec': caseName.title, 'log': log})
 
 
 # endregion
@@ -479,17 +483,16 @@ def customFuction():
 #region
 '''grid '''
 def queryGrid():
-    baseUrl = "http://10.7.242.68"
+    baseUrl = "http://10.7.242.68:3333/grid/register"
     dd = urllib.urlopen(baseUrl)
     print dd
 
 #endregion
 
 if __name__ == '__main__':
-    '''myapplication.debug = True
+    myapplication.debug = True
     ip = socket.gethostbyname(socket.gethostname())
     if ip == '10.7.243.110':
         myapplication.run()
     else:
-        myapplication.run(host='10.7.246.175', port=5000)'''
-    queryGrid()
+        myapplication.run(host='10.7.246.80', port=5000)
