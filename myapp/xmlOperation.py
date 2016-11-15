@@ -4,7 +4,9 @@
 @time:10/18/16 16:45
 '''
 
-import xml.etree.ElementTree as ET
+import sys
+sys.path.append('.')
+import  xml.etree.ElementTree as ET
 from xml.etree.ElementTree import tostring
 from xml.dom import minidom
 from myapp.models import Execution, TestCases, TestSteps, Tasks, Element, Page, TaskLog
