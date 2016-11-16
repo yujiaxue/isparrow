@@ -498,10 +498,15 @@ def mydoc():
 
 @myapplication.route('/webuifunctiondescription')
 def functiondescription():
-    pass
-
+    allfunction = Actions.query.all()
+    return render_template("funcdesc.html",a={'pagec':u'函数列表','action':[func.to_json() for func in allfunction]})
 
 #endregion
+
+
+@myapplication.route('/aaaaa')
+def aaaaa():
+    return render_template('test1.html',a={'pagec':u'asdfsdf',})
 if __name__ == '__main__':
     myapplication.debug = True
     ip = socket.gethostbyname(socket.gethostname())

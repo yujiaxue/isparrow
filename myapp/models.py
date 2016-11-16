@@ -276,9 +276,19 @@ class Actions(Base):
     id = Column(Integer, nullable=False, primary_key=True)
     operation = Column(String, )
     value = Column(String, )
+    description = Column(String,)
     createtime = Column(DateTime, )
     updatetime = Column(DateTime, )
 
+    def to_json(self):
+        return {
+            'id':self.id,
+            'operation':self.operation,
+            'value':self.value,
+            'description':self.description,
+            'createtime':self.createtime,
+            'updatetime':self.updatetime
+        }
 
 class TaskLog(Base):
     __tablename__ = 'tasklogs'

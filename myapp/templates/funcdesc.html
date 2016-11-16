@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block content %}
+
+    <div class="row">
+    <div class="col-sm-9 col-sm-offset-1 col-md-10 col-md-offset-1" >
+    <h2 class="sub-header " >{{ a.pagec }}</h2>
+
+        <table class="table table-hover ">
+            <thead >
+            <th>函数</th>
+            <th>参数</th>
+            <th>说明</th>
+            </thead>
+            <tbody>
+                {% for f in a.action %}
+                    <tr>
+                        <td>{{ f.operation }}</td>
+                        <td>{{ f.value }}</td>
+                        <td>{{ f.description }}</td>
+                    </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
