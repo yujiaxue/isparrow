@@ -1,6 +1,35 @@
 {% extends 'base.html' %}
 
 {% block content %}
+ <div class="container-fluid">
+        <div class="row">
+            {% include 'sidebar.html' %}
 
+            <h2 class="sub-header col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2">{{ a.pagec }}</h2>
 
+<div class="container" style="position:relative;margin-top: 80px;" >
+            <div class="list-group col-md-offset-2" >
+                <a class="list-group-item" href="/useNavigation" target="_blank" style="border: 0;">
+                    <div class="row" ><div class="col-md-3 "> <h4>爱屋吉屋webUI自动化平台使用说明</h4></div>
+                        <div class="col-md-7" ><p>按照添加页面对象-》属于该页面对象的元素-》基于以上对象添加用例-》选择用例构成测试计划
+                        </p></div>
+                    </div>
+                </a>
+                <a class="list-group-item" href="http://www.w3school.com.cn/xpath/" target="_blank" style="border: 0;">
+                    <div class="row" ><div class="col-md-3 "> <h4>xpath教程</h4></div>
+                        <div class="col-md-7" ><p>w3school上有很多教程,可以很好的利用
+                        </p></div>
+                    </div>
+                </a>
+                <a class="list-group-item" href="/webuifunctiondescription" target="_blank" style="border: 0;">
+                    <div class="row" ><div class="col-md-3 "> <h4>爱屋吉屋web UI函数doc</h4></div>
+                        <div class="col-md-7" ><p>爱屋吉屋webui自动化的函数列表及参数,返回值使用说明
+                        </p></div>
+                    </div>
+                </a>
+            </div>
+
+        </div>
+            </div>
+    </div>
 {% endblock %}

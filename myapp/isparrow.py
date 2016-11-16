@@ -490,14 +490,17 @@ def queryGrid():
 #endregion
 
 
-
 #region
 '''doc '''
-
-@myapplication.route('/doc')
+@myapplication.route('/alldoc')
 def mydoc():
-
     return render_template('mydoc.html',a={'pagec':u'使用说明'})
+
+@myapplication.route('/webuifunctiondescription')
+def functiondescription():
+    pass
+
+
 #endregion
 if __name__ == '__main__':
     myapplication.debug = True
