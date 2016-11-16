@@ -489,10 +489,20 @@ def queryGrid():
 
 #endregion
 
+
+
+#region
+'''doc '''
+
+@myapplication.route('/doc')
+def mydoc():
+
+    return render_template('mydoc.html',a={'pagec':u'使用说明'})
+#endregion
 if __name__ == '__main__':
     myapplication.debug = True
     ip = socket.gethostbyname(socket.gethostname())
     if ip == '10.7.243.110':
         myapplication.run()
     else:
-        myapplication.run(host='10.7.246.80', port=5000)
+        myapplication.run(host='127.0.0.1', port=5000)

@@ -78,7 +78,9 @@
                 }
             };
             var tasks = new Array();
-            $('tr.parent td:gt(0)').click(function () {
+            //'tr.parent td:gt(0)'
+            $('td:not("td.cc")').click(function () {
+                console.log($(this));
                 var toc = $(this).parent("tr").attr('id');
                 $(this).parent().siblings(".child" + toc).toggle();
             });
