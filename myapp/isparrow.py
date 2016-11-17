@@ -206,6 +206,32 @@ def deleteItem():
     form = request.form
     sid = form.get('id')
 
+@myapplication.route('/updateonestep',methods=['post'])
+def editItem():
+    form = request.form
+    id = form.get('id')
+    sort = form.get('sid')
+    cid = form.get('cid')
+    page = form.get('page')
+    element = form.get('element')
+    action = form.get('action')
+    value = form.get('input')
+    attr = form.get('attr')
+
+    if not cid or not page or not action:
+        return jsonify({'status': 'fail'})
+
+    step = TestSteps.query.filter(TestSteps.id==id).first()
+    step.sort=sort
+    step.cid=cid
+    step.page = page
+    step.element = element
+    step.action = action
+    step.value = value
+    step.attr = attr
+    db_session.add(step)
+    db_session.commit()
+    return jsonify({'status':'success'})
 
 # endregion
 

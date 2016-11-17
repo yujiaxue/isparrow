@@ -21992,6 +21992,7 @@
 	    },
 	    addStep: function (e) {
 	        this.setState({add: true});
+	        this.listSteps();
 	        var pages = this.props.pages;
 	        var actions = this.props.actions;
 	        var pageelement = this.props.pageelement;
@@ -22042,6 +22043,9 @@
 	        var input = ReactDom.findDOMNode(this.refs.input).value.trim();
 	        var attr = ReactDom.findDOMNode(this.refs.attr).value.trim();
 
+	        if(!page || !element || !action){
+	            return ;
+	        }
 	        $.ajax({
 	            type: 'post',
 	            url: '/addonestep',
@@ -22060,6 +22064,24 @@
 	        return;
 	    },
 
+	    handlerUpdateStep: function (data) {
+	        $.ajax({
+	            type: 'post',
+	            url: '/updateonestep',
+	            data: data,
+	            dataType: 'json'
+	        }).done(function (resp) {
+	            if (resp.status == 'success') {
+	                this.listSteps();
+	            }
+	        }.bind(this));
+	        /*ReactDom.findDOMNode(this.refs.page).value = '';
+	        ReactDom.findDOMNode(this.refs.element).value = '';
+	        ReactDom.findDOMNode(this.refs.action).value = '';
+	        ReactDom.findDOMNode(this.refs.input).value = '';
+	        ReactDom.findDOMNode(this.refs.attr).value = '';*/
+	        return;
+	    },
 
 	    contentForm: function () {
 	        return this.state.add ? (
@@ -22096,7 +22118,7 @@
 	    },
 	    render: function () {
 	        var mySteps = this.state.steps.map(function (item) {
-	            return React.createElement(StepList, {key: item.id, step: item})
+	            return React.createElement(StepList, {key: item.id, step: item, updateStep: this.handlerUpdateStep})
 	        }.bind(this));
 	        var orderid = 1;
 	        var item = this.props.page;
@@ -22130,8 +22152,14 @@
 	 * Created by zhangfujun on 10/10/16.
 	 */
 	var React = __webpack_require__(166);
+	var ReactDom = __webpack_require__(1);
 
 	var StepList = React.createClass({displayName: "StepList",
+	    getInitialState:function () {
+	      return {
+	          edit:false
+	      }
+	    },
 	    deleteItem: function () {
 	        var id = this.step.id;
 	        $.ajax({
@@ -22145,16 +22173,72 @@
 	            }
 	        })
 	    },
+	    editItem:function(){
+	        this.setState({edit: true});
+	    },
+	    handlerStepUpdate:function (e) {
+	        e.preventDefault();
+	        var id = this.props.step.id;
+	        var cid = this.props.step.caseid;
+	        var sid = ReactDom.findDOMNode(this.refs.sortn).value;
+	        var page = ReactDom.findDOMNode(this.refs.page).value.trim();
+	        var element = ReactDom.findDOMNode(this.refs.element).value.trim();
+	        var action = ReactDom.findDOMNode(this.refs.action).value.trim();
+	        var input = ReactDom.findDOMNode(this.refs.input).value.trim();
+	        var attr = ReactDom.findDOMNode(this.refs.attr).value.trim();
+	        if (!id || !page || !element || !action){
+	            return ;
+	        }
+	        this.props.updateStep({id:id,cid:cid, sid: sid, page: page, element: element, action: action, input: input, attr: attr});
+	        this.setState({edit: false});
+	        return;
+	    },
 	    render: function () {
 	        var step = this.props.step;
+	        if (this.state.edit){
+	            return (
+	                React.createElement("div", {className: "subform"}, 
+	                React.createElement("form", {onSubmit: this.handlerStepUpdate}, 
+	                    React.createElement("span", {className: "col-lg-1"}, React.createElement("label", {className: "label label-info"}, this.props.step.sort), 
+	                    React.createElement("input", {ref: "sortn", type: "hidden", defaultValue: this.props.step.sort}), " "), 
+	                    React.createElement("span", {className: "col-lg-2 content", style: {paddingRight: '0px', paddingLeft: '0px'}}, 
+	                        React.createElement("input", {ref: "page", className: "form-control", type: "text", id: "page", 
+	                               name: "page", placeholder: "页面", defaultValue: this.props.step.page})
+	                    ), 
+	                    React.createElement("span", {className: "col-lg-2 content", style: {paddingRight: '0px', paddingLeft: '0px'}}, " ", React.createElement("input", {
+	                        ref: "element", className: "form-control", type: "text", 
+	                        name: "selenium", 
+	                        id: "selenium", placeholder: "元素", defaultValue: this.props.step.element})), 
+	                    React.createElement("span", {className: "col-lg-2 content", style: {paddingRight: '0px', paddingLeft: '0px'}}, " ", React.createElement("input", {
+	                        ref: "action", className: "form-control", type: "text", 
+	                        name: "action", 
+	                        id: "action", placeholder: "动作", defaultValue: this.props.step.action})), 
+	                    React.createElement("span", {className: "col-lg-2 content", id: "sp", style: {paddingRight: '0px', paddingLeft: '0px'}}, " ", React.createElement("input", {
+	                        ref: "input", className: "form-control", type: "text", 
+	                        name: "input", 
+	                        placeholder: "输入值", defaultValue: this.props.step.value})), 
+	                    React.createElement("span", {className: "col-lg-2 content", 
+	                          style: {paddingRight: '0px', paddingLeft: '0px', display: 'hidden'}}, " ", React.createElement("input", {
+	                        ref: "attr", className: "form-control", type: "text", 
+	                        name: "attr", 
+	                        placeholder: "断言属性", defaultValue: this.props.step.attr})), 
+	                    React.createElement("span", {className: "col-lg-1 content"}, " ", React.createElement("button", {className: "btn btn-info", type: "submit", 
+	                                                                id: "submit"}, "保存"))
+	                )
+	            )
+	            )
+
+	        }else{
+
+
 	        return (
-	            React.createElement("div", {className: "subcontent "}, 
-	                React.createElement("span", {className: "col-lg-1"}, React.createElement("label", {className: "label label-info"}, step.sort)), 
-	                React.createElement("span", {className: "content col-lg-2"}, step.page), 
-	                React.createElement("span", {className: "content col-lg-3"}, step.element), 
-	                React.createElement("span", {className: "content col-lg-2"}, step.action), 
-	                React.createElement("span", {className: "content col-lg-2"}, step.value), 
-	                React.createElement("span", {className: "content col-lg-1"}, step.attr), 
+	            React.createElement("div", {className: "subcontent ", id: step.id}, 
+	                React.createElement("span", {className: "col-lg-1"}, React.createElement("label", {className: "label label-info", ref: "sort"}, step.sort)), 
+	                React.createElement("span", {className: "content col-lg-2", ref: "page"}, step.page), 
+	                React.createElement("span", {className: "content col-lg-3", ref: "element"}, step.element), 
+	                React.createElement("span", {className: "content col-lg-2", ref: "action"}, step.action), 
+	                React.createElement("span", {className: "content col-lg-2", ref: "value"}, step.value), 
+	                React.createElement("span", {className: "content col-lg-1", ref: "attr"}, step.attr), 
 	                React.createElement("span", {className: "content col-lg-1"}, 
 	                    React.createElement("button", {type: "button", className: "btn btn-info", onClick: this.editItem}, "edit")
 	                    /*<button type="button" className="btn btn-info" onClick={this.deleteItem}>d</button>
@@ -22162,6 +22246,7 @@
 	                )
 	            )
 	        )
+	            }
 	    }
 	});
 	module.exports = StepList;

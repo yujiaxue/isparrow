@@ -17,6 +17,7 @@ CaseItem = React.createClass({
     },
     addStep: function (e) {
         this.setState({add: true});
+        this.listSteps();
         var pages = this.props.pages;
         var actions = this.props.actions;
         var pageelement = this.props.pageelement;
@@ -67,6 +68,9 @@ CaseItem = React.createClass({
         var input = ReactDom.findDOMNode(this.refs.input).value.trim();
         var attr = ReactDom.findDOMNode(this.refs.attr).value.trim();
 
+        if(!page || !element || !action){
+            return ;
+        }
         $.ajax({
             type: 'post',
             url: '/addonestep',
@@ -85,6 +89,24 @@ CaseItem = React.createClass({
         return;
     },
 
+    handlerUpdateStep: function (data) {
+        $.ajax({
+            type: 'post',
+            url: '/updateonestep',
+            data: data,
+            dataType: 'json'
+        }).done(function (resp) {
+            if (resp.status == 'success') {
+                this.listSteps();
+            }
+        }.bind(this));
+        /*ReactDom.findDOMNode(this.refs.page).value = '';
+        ReactDom.findDOMNode(this.refs.element).value = '';
+        ReactDom.findDOMNode(this.refs.action).value = '';
+        ReactDom.findDOMNode(this.refs.input).value = '';
+        ReactDom.findDOMNode(this.refs.attr).value = '';*/
+        return;
+    },
 
     contentForm: function () {
         return this.state.add ? (
@@ -121,7 +143,7 @@ CaseItem = React.createClass({
     },
     render: function () {
         var mySteps = this.state.steps.map(function (item) {
-            return <StepList key={item.id} step={item}/>
+            return <StepList key={item.id} step={item} updateStep={this.handlerUpdateStep}/>
         }.bind(this));
         var orderid = 1;
         var item = this.props.page;
