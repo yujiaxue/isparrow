@@ -205,6 +205,11 @@ def getStepNum():
 def deleteItem():
     form = request.form
     sid = form.get('id')
+    ts = TestSteps.query.filter(TestSteps.id==sid).first()
+    db_session.delete(ts)
+    db_session.commit()
+    return jsonify({'status':'success'})
+
 
 @myapplication.route('/updateonestep',methods=['post'])
 def editItem():

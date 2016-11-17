@@ -68,7 +68,7 @@ CaseItem = React.createClass({
         var input = ReactDom.findDOMNode(this.refs.input).value.trim();
         var attr = ReactDom.findDOMNode(this.refs.attr).value.trim();
 
-        if(!page || !element || !action){
+        if(!page  || !action){
             return ;
         }
         $.ajax({
@@ -86,6 +86,19 @@ CaseItem = React.createClass({
         ReactDom.findDOMNode(this.refs.action).value = '';
         ReactDom.findDOMNode(this.refs.input).value = '';
         ReactDom.findDOMNode(this.refs.attr).value = '';
+        return;
+    },
+    deleteItem:function (data) {
+        $.ajax({
+            type: 'post',
+            url: '/deleteItem',
+            data: data,
+            dataType: 'json'
+        }).done(function (resp) {
+            if (resp.status == 'success') {
+                this.listSteps();
+            }
+        }.bind(this));
         return;
     },
 
@@ -143,13 +156,13 @@ CaseItem = React.createClass({
     },
     render: function () {
         var mySteps = this.state.steps.map(function (item) {
-            return <StepList key={item.id} step={item} updateStep={this.handlerUpdateStep}/>
+            return <StepList key={item.id} step={item} updateStep={this.handlerUpdateStep} deleteItem={this.deleteItem}/>
         }.bind(this));
         var orderid = 1;
         var item = this.props.page;
         return (
             <div className="col-lg-12">
-                <h3><span className="col-lg-6" id={item.id}>{item.title} </span>
+                <h5><span className="col-lg-6" id={item.id}>{item.title} </span>
                     <div className="btn-group-xs">
                         <button onClickCapture={this.addStep} className="btn btn-default btn-info"
                                 style={{marginRight: '3px'}} id="addcase"><i
@@ -158,7 +171,7 @@ CaseItem = React.createClass({
                         <button onClick={this.collpase} className="btn btn-default btn-info" id="expanse"><i
                             className="glyphicon glyphicon-chevron-down"></i></button>
                     </div>
-                </h3>
+                </h5>
                 {mySteps}
                 {this.contentForm()}
             </div>

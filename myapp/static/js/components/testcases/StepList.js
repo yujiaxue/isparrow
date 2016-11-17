@@ -7,21 +7,15 @@ var ReactDom = require('react-dom');
 var StepList = React.createClass({
     getInitialState:function () {
       return {
-          edit:false
+          edit:false,
+          update:false
       }
     },
     deleteItem: function () {
-        var id = this.step.id;
-        $.ajax({
-            type: 'post',
-            url: '/deleteItem',
-            data: {id: id},
-            dataType: 'json'
-        }).done(function (resp) {
-            if (resp.status == 'success') {
-                this.state.update = true;
-            }
-        })
+        var id = this.props.step.id;
+        data = {id:id};
+        this.props.deleteItem(data);
+
     },
     editItem:function(){
         this.setState({edit: true});
@@ -36,7 +30,7 @@ var StepList = React.createClass({
         var action = ReactDom.findDOMNode(this.refs.action).value.trim();
         var input = ReactDom.findDOMNode(this.refs.input).value.trim();
         var attr = ReactDom.findDOMNode(this.refs.attr).value.trim();
-        if (!id || !page || !element || !action){
+        if (!id || !page  || !action){
             return ;
         }
         this.props.updateStep({id:id,cid:cid, sid: sid, page: page, element: element, action: action, input: input, attr: attr});
@@ -44,6 +38,7 @@ var StepList = React.createClass({
         return;
     },
     render: function () {
+        console.log('ok..');
         var step = this.props.step;
         if (this.state.edit){
             return (
@@ -85,14 +80,15 @@ var StepList = React.createClass({
             <div className="subcontent " id = {step.id} >
                 <span className="col-lg-1"><label className="label label-info" ref="sort">{step.sort}</label></span>
                 <span className="content col-lg-2" ref="page">{step.page}</span>
-                <span className="content col-lg-3" ref="element">{step.element}</span>
+                <span className="content col-lg-2" ref="element">{step.element}</span>
                 <span className="content col-lg-2" ref="action">{step.action}</span>
                 <span className="content col-lg-2" ref="value">{step.value}</span>
                 <span className="content col-lg-1" ref="attr">{step.attr}</span>
-                <span className="content col-lg-1">
-                    <button type="button" className="btn btn-info" onClick={this.editItem}>edit</button>
-                    {/*<button type="button" className="btn btn-info" onClick={this.deleteItem}>d</button>
-                     <button type="button" className="btn btn-info" onClick={this.afterItem}>a</button>*/}
+                <span className=" col-lg-2">
+                    <div className="btn-group-xs">
+                    <button type="button" className="btn btn-info btn-xs" onClick={this.editItem}>edit</button>
+                    <button type="button" className="btn btn-danger btn-xs" onClick={this.deleteItem}>del</button>
+                </div>
                 </span>
             </div>
         )

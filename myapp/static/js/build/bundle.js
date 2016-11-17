@@ -22043,7 +22043,7 @@
 	        var input = ReactDom.findDOMNode(this.refs.input).value.trim();
 	        var attr = ReactDom.findDOMNode(this.refs.attr).value.trim();
 
-	        if(!page || !element || !action){
+	        if(!page  || !action){
 	            return ;
 	        }
 	        $.ajax({
@@ -22061,6 +22061,19 @@
 	        ReactDom.findDOMNode(this.refs.action).value = '';
 	        ReactDom.findDOMNode(this.refs.input).value = '';
 	        ReactDom.findDOMNode(this.refs.attr).value = '';
+	        return;
+	    },
+	    deleteItem:function (data) {
+	        $.ajax({
+	            type: 'post',
+	            url: '/deleteItem',
+	            data: data,
+	            dataType: 'json'
+	        }).done(function (resp) {
+	            if (resp.status == 'success') {
+	                this.listSteps();
+	            }
+	        }.bind(this));
 	        return;
 	    },
 
@@ -22118,13 +22131,13 @@
 	    },
 	    render: function () {
 	        var mySteps = this.state.steps.map(function (item) {
-	            return React.createElement(StepList, {key: item.id, step: item, updateStep: this.handlerUpdateStep})
+	            return React.createElement(StepList, {key: item.id, step: item, updateStep: this.handlerUpdateStep, deleteItem: this.deleteItem})
 	        }.bind(this));
 	        var orderid = 1;
 	        var item = this.props.page;
 	        return (
 	            React.createElement("div", {className: "col-lg-12"}, 
-	                React.createElement("h3", null, React.createElement("span", {className: "col-lg-6", id: item.id}, item.title, " "), 
+	                React.createElement("h5", null, React.createElement("span", {className: "col-lg-6", id: item.id}, item.title, " "), 
 	                    React.createElement("div", {className: "btn-group-xs"}, 
 	                        React.createElement("button", {onClickCapture: this.addStep, className: "btn btn-default btn-info", 
 	                                style: {marginRight: '3px'}, id: "addcase"}, React.createElement("i", {
@@ -22157,21 +22170,15 @@
 	var StepList = React.createClass({displayName: "StepList",
 	    getInitialState:function () {
 	      return {
-	          edit:false
+	          edit:false,
+	          update:false
 	      }
 	    },
 	    deleteItem: function () {
-	        var id = this.step.id;
-	        $.ajax({
-	            type: 'post',
-	            url: '/deleteItem',
-	            data: {id: id},
-	            dataType: 'json'
-	        }).done(function (resp) {
-	            if (resp.status == 'success') {
-	                this.state.update = true;
-	            }
-	        })
+	        var id = this.props.step.id;
+	        data = {id:id};
+	        this.props.deleteItem(data);
+
 	    },
 	    editItem:function(){
 	        this.setState({edit: true});
@@ -22186,7 +22193,7 @@
 	        var action = ReactDom.findDOMNode(this.refs.action).value.trim();
 	        var input = ReactDom.findDOMNode(this.refs.input).value.trim();
 	        var attr = ReactDom.findDOMNode(this.refs.attr).value.trim();
-	        if (!id || !page || !element || !action){
+	        if (!id || !page  || !action){
 	            return ;
 	        }
 	        this.props.updateStep({id:id,cid:cid, sid: sid, page: page, element: element, action: action, input: input, attr: attr});
@@ -22194,6 +22201,7 @@
 	        return;
 	    },
 	    render: function () {
+	        console.log('ok..');
 	        var step = this.props.step;
 	        if (this.state.edit){
 	            return (
@@ -22235,14 +22243,15 @@
 	            React.createElement("div", {className: "subcontent ", id: step.id}, 
 	                React.createElement("span", {className: "col-lg-1"}, React.createElement("label", {className: "label label-info", ref: "sort"}, step.sort)), 
 	                React.createElement("span", {className: "content col-lg-2", ref: "page"}, step.page), 
-	                React.createElement("span", {className: "content col-lg-3", ref: "element"}, step.element), 
+	                React.createElement("span", {className: "content col-lg-2", ref: "element"}, step.element), 
 	                React.createElement("span", {className: "content col-lg-2", ref: "action"}, step.action), 
 	                React.createElement("span", {className: "content col-lg-2", ref: "value"}, step.value), 
 	                React.createElement("span", {className: "content col-lg-1", ref: "attr"}, step.attr), 
-	                React.createElement("span", {className: "content col-lg-1"}, 
-	                    React.createElement("button", {type: "button", className: "btn btn-info", onClick: this.editItem}, "edit")
-	                    /*<button type="button" className="btn btn-info" onClick={this.deleteItem}>d</button>
-	                     <button type="button" className="btn btn-info" onClick={this.afterItem}>a</button>*/
+	                React.createElement("span", {className: " col-lg-2"}, 
+	                    React.createElement("div", {className: "btn-group-xs"}, 
+	                    React.createElement("button", {type: "button", className: "btn btn-info btn-xs", onClick: this.editItem}, "edit"), 
+	                    React.createElement("button", {type: "button", className: "btn btn-danger btn-xs", onClick: this.deleteItem}, "del")
+	                )
 	                )
 	            )
 	        )
