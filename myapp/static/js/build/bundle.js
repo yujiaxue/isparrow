@@ -22205,7 +22205,7 @@
 	        var step = this.props.step;
 	        if (this.state.edit){
 	            return (
-	                React.createElement("div", {className: "subform"}, 
+	                React.createElement("div", {className: "subform clearfix"}, 
 	                React.createElement("form", {onSubmit: this.handlerStepUpdate}, 
 	                    React.createElement("span", {className: "col-lg-1"}, React.createElement("label", {className: "label label-info"}, this.props.step.sort), 
 	                    React.createElement("input", {ref: "sortn", type: "hidden", defaultValue: this.props.step.sort}), " "), 
@@ -22240,7 +22240,7 @@
 
 
 	        return (
-	            React.createElement("div", {className: "subcontent ", id: step.id}, 
+	            React.createElement("div", {className: "subcontent clearfix", id: step.id}, 
 	                React.createElement("span", {className: "col-lg-1"}, React.createElement("label", {className: "label label-info", ref: "sort"}, step.sort)), 
 	                React.createElement("span", {className: "content col-lg-2", ref: "page"}, step.page), 
 	                React.createElement("span", {className: "content col-lg-2", ref: "element"}, step.element), 

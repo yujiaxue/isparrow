@@ -42,7 +42,7 @@ var StepList = React.createClass({
         var step = this.props.step;
         if (this.state.edit){
             return (
-                <div className="subform">
+                <div className="subform clearfix">
                 <form onSubmit={this.handlerStepUpdate}>
                     <span className="col-lg-1"><label className="label label-info">{this.props.step.sort}</label>
                     <input ref="sortn" type="hidden" defaultValue={this.props.step.sort}/> </span>
@@ -77,7 +77,7 @@ var StepList = React.createClass({
 
 
         return (
-            <div className="subcontent " id = {step.id} >
+            <div className="subcontent clearfix" id = {step.id} >
                 <span className="col-lg-1"><label className="label label-info" ref="sort">{step.sort}</label></span>
                 <span className="content col-lg-2" ref="page">{step.page}</span>
                 <span className="content col-lg-2" ref="element">{step.element}</span>

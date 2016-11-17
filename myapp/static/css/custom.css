@@ -12,4 +12,5 @@
 
 .subcontent, .subform {
     margin-bottom: 1px;
+    word-wrap:break-word;
 }
