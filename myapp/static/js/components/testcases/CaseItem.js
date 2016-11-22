@@ -32,7 +32,7 @@ CaseItem = React.createClass({
                 var key = $(this).val();
                 $('#selenium').autocomplete({
                     source: pageelement[key]
-                })
+                });
             });
         }, 0)
 
