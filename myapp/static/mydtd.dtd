@@ -1,15 +1,14 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <!ELEMENT testSuites (test*)>
 <!ELEMENT test (step*)>
-
-<!ATTLIST testSuites count #CDATA>
-<!ATTLIST testSuites exeid #CDATA>
-<!ATTLIST testSuites suiteName #CDATA>
+<!ATTLIST testSuites count CDATA #IMPLIED>
+<!ATTLIST testSuites exeid CDATA #IMPLIED>
+<!ATTLIST testSuites suiteName CDATA #IMPLIED>
 <!ATTLIST test caseid ID #REQUIRED >
-<!ATTLIST test name #CDATA >
+<!ATTLIST test name CDATA #IMPLIED>
 <!ELEMENT step (#PCDATA)>
-<!ATTLIST step action #CDATA >
-<!ATTLIST step attr #CDATA>
-<!ATTLIST step id #CDATA>
-<!ATTLIST step inputValue #CDATA>
-<!ATTLIST step locator #CDATA>
+<!ATTLIST step action CDATA #IMPLIED>
+<!ATTLIST step attr CDATA #IMPLIED>
+<!ATTLIST step id CDATA #IMPLIED>
+<!ATTLIST step inputValue CDATA #IMPLIED>
+<!ATTLIST step locator CDATA #IMPLIED>
