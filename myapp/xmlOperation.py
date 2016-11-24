@@ -39,7 +39,7 @@ def createXml(taskid, excuteid):
                                  {'id': str(ts.id), 'locator': locator, 'action': action, 'inputValue': inputValue,
                                   'attr': attr})
     # tree = ET.ElementTree(root)
-    text = '<?xml version="1.0" encoding="utf-8" ?><!DOCTYPE testSuites PUBLIC "http://10.7.243.110:8080/static/mydtd.dtd" "">' + tostring(root, 'utf-8')
+    text = '<?xml version="1.0" encoding="utf-8" ?><!DOCTYPE testSuites PUBLIC "-//zhangfujun private//sparrow framework 0.1//EN" "http://10.7.243.110:8080/static/mydtd.dtd">' + tostring(root, 'utf-8')
     executeCommand = TaskLog(taskid, excuteid, text)
     db_session.add(executeCommand)
     db_session.commit()
