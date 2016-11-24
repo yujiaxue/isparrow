@@ -1,10 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends 'base.html' %}
+{% block content %}
+    <div class="col-sm-9 col-sm-offset-1 col-md-10 col-md-offset-1">
+   <h2 class="sub-header">{{ a.pagec }}</h2>
+
+    <img class="col-sm-11 col-md-12" src="{{ url_for('static',filename='img/firstStep.png') }}" />
+    <img class="col-sm-11 col-md-12" src="{{ url_for('static',filename='img/secondStep.png') }}" />
+    <img class="col-sm-11 col-md-12" src="{{ url_for('static',filename='img/thirdStep.png') }}" />
+    <img class="col-sm-11 col-md-12" src="{{ url_for('static',filename='img/fourthStep.png') }}" />
+    <img class="col-sm-11 col-md-12" src="{{ url_for('static',filename='img/fifthStep.png') }}" />
+    <img class="col-sm-11 col-md-12" src="{{ url_for('static',filename='img/sixthStep.png') }}" />
+    <img class="col-sm-11 col-md-12" src="{{ url_for('static',filename='img/seventhStep.png') }}" />
+
+    </div>
+
+{% endblock %}

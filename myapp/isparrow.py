@@ -156,7 +156,7 @@ def deleteElement():
 def getSteps(cid):
     steps = []
     if cid:
-        steps = TestSteps.query.filter(TestSteps.caseid == cid).order_by(TestSteps.sort.asc()).all()
+        steps = TestSteps.query.filter((TestSteps.caseid == cid).__and__(TestSteps.label== 1)).order_by(TestSteps.sort.asc()).all()
     if steps:
         return jsonify(steps=[step.tojson() for step in steps], status='success')
     else:
@@ -205,8 +205,11 @@ def getStepNum():
 def deleteItem():
     form = request.form
     sid = form.get('id')
+
     ts = TestSteps.query.filter(TestSteps.id==sid).first()
-    db_session.delete(ts)
+    ts.label=0
+    # db_session.delete(ts)
+    db_session.add(ts)
     db_session.commit()
     return jsonify({'status':'success'})
 
@@ -532,12 +535,19 @@ def functiondescription():
     allfunction = Actions.query.all()
     return render_template("funcdesc.html",a={'pagec':u'函数列表','action':[func.to_json() for func in allfunction]})
 
+@myapplication.route('/useNavigation')
+def useNavigation():
+    import  markdown2
+    useNaviation = markdown2.markdown('*this is  a useNavigation*')
+    return render_template('useNavigation.html',a={'pagec':u'使用向导','useNaviation':useNaviation})
 #endregion
 
 
 @myapplication.route('/aaaaa')
 def aaaaa():
     return render_template('test1.html',a={'pagec':u'asdfsdf',})
+
+
 if __name__ == '__main__':
     myapplication.debug = True
     ip = socket.gethostbyname(socket.gethostname())
