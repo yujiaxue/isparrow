@@ -8,8 +8,9 @@
 
         <div id="todo-container"></div>#}
     <div class="row">
-        <div class="col-sm-10 col-sm-offset-1 col-md-10 col-md-offset-1">
-            <table class="table table-responsive table-no-bordered ">
+        <h1></h1>
+        <div class="col-sm-10 col-sm-offset-1 col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
+            <table class="table table-responsive table-no-border ">
                 <thead>
                 <th>用例</th>
                 <th>通过</th>
@@ -19,10 +20,10 @@
                 {% for cc in a %}
                     <tr>
                         <td>{{ cc[1].get('title') }}</td>
-                        <td> {% if cc[1].get('pass') %}
-                            <label class="label-success label">{{ cc[1].get('pass') }}</label> {% else %}0{% endif %}</td>
-                        <td>{% if cc[1].get('fail') %}
-                            <label class="label-danger label">{{ cc[1].get('fail') }}</label>{% else %}0{% endif %}</td>
+                        <td> <label class="label-success label">{% if cc[1].get('pass') %}
+                            {{ cc[1].get('pass') }}{% else %}0{% endif %}</label> </td>
+                        <td><label class="label-danger label">{% if cc[1].get('fail') %}
+                            {{ cc[1].get('fail') }}{% else %}0{% endif %}</label></td>
                     </tr>
                 {% endfor %}
                 </tbody>
