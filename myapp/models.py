@@ -1,8 +1,8 @@
 # -* - coding:utf8 -* -
-from myapp.database import Base
+from myapp.database import Base,db_session
 from sqlalchemy import Column, Integer, String, DateTime
 from datetime import datetime
-
+from sqlalchemy import select
 GMT_FORMAT = '%a, %d %b %Y %H:%M:%S GMT'
 MY_FORMAT = '%Y/%m/%d %H:%M:%S'
 
@@ -233,7 +233,42 @@ class Execution(Base):
             t.page, t.element, t.action, t.value if t.value else '', t.attr if t.attr else '')
         }
 
+def statistic():
+    '''1. list all case
+       2. statistic case run count
+       3. combine case title and  remove case undone
+       4.
+       '''
+    #select caseid,status,count(*) from execution  group by caseid,status,stepid having stepid=0;
 
+    r = db_session.execute('''
+            select t.id,t.title,e.status,count(e.id) as num
+            from testcase t left join execution e
+            on e.stepid=0 and e.status != 'undone' and t.id=e.caseid group by t.id,e.status
+            ''').fetchall()
+    print r
+    ids = []
+    for id in r:
+        ids.append(id[0])
+    ids = list(set(ids))
+    result = {}
+    for id in ids:
+        result[id] ={}
+        for myr in r:
+            if id == myr[0]:
+                result[id]['title'] = myr[1]
+                if myr[2] =='fail':
+                    result[id]['fail'] = myr[3] if myr[3] else 0
+                elif myr[2] =='pass':
+                    result[id]['pass'] = myr[3] if myr[3] else 0
+                    break
+                elif myr[2] == None:
+                    result[id]['fail'] = 0
+                    result[id]['pass'] = 0
+                    break
+            else:
+                continue
+    return sorted(result.iteritems(),key=lambda x:x[1].get('fail'),reverse=True)
 class Excute(Base):
     __tablename__ = 'excute'
     id = Column(Integer, nullable=False, primary_key=True)

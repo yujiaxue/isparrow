@@ -7,7 +7,7 @@ from time import sleep
 import json, urllib2, urllib, socket
 
 from myapp.database import db_session, engine
-from myapp.models import Page, Element, TestCases, TestSteps, Tasks, Execution, Excute, Actions, TaskLog
+from myapp.models import Page, Element, TestCases, TestSteps, Tasks, Execution, Excute, Actions, TaskLog,statistic
 import xmlOperation
 
 
@@ -397,7 +397,8 @@ def progress(tid):
 
 @myapplication.route('/')
 def hello_world():
-    return render_template("index.html")
+    caseStatistic = statistic()
+    return render_template("index.html",a =caseStatistic)
 
 
 @myapplication.route('/element/<pid>')
