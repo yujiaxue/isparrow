@@ -42,10 +42,10 @@
                     <tr class="parent" id="0{{ case }}">
                         <td class="cc"><input type="checkbox" id="{{ case }}"/></td>
                         <td>{{ a.mylist[case].case.title }}</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        <td>{{ a.mylist[case].case.assertCount }}</td>
+                        <td>{{ a.mylist[case].case.runCount }}</td>
+                        <td>{{ a.mylist[case].case.failCount }}</td>
+                        <td>{{ a.mylist[case].case.changeCount }}</td>
                     </tr>
                     {% if a.mylist[case].step %}
                         {% for step in a.mylist[case].step %}

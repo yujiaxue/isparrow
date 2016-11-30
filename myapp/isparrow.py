@@ -52,6 +52,7 @@ def showCase():
                 mysteps.append(step.tojson())
             s = mysteps
         mylist[case.id] = {'case': c, 'step': s}
+    print mylist
     return render_template('testcases.html', a={'pagec': u'测试用例', 'showcase': True, 'mylist': mylist})
 
 

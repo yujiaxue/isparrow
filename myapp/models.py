@@ -86,6 +86,10 @@ class TestCases(Base):
     id = Column(Integer, primary_key=True, nullable=False)
     title = Column(String, nullable=False)
     author = Column(String, default='QA')
+    assertCount = Column(Integer,)
+    runCount = Column(Integer,)
+    failCount = Column(Integer,)
+    changeCount = Column(Integer,)
     createtime = Column(DateTime, )
     updatetime = Column(DateTime, )
 
@@ -102,7 +106,12 @@ class TestCases(Base):
             'author': self.author,
             'createtime': date_format(self.createtime),
             'updatetime': date_format(self.updatetime),
-            'progress': '90'
+            'progress': '90',
+            'assertCount':self.assertCount,
+            'executeCount':self.runCount,
+            'runCount':self.runCount,
+            'failCount':self.failCount,
+            'changeCount':self.changeCount
         }
 
     def querystatus(self, taskid):
